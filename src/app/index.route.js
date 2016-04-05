@@ -12,7 +12,7 @@
     $urlRouterProvider
   ) {
     $stateProvider
-      .state('home', {
+      .state('map', {
         url: '/',
         views: {
           nav: {
@@ -21,9 +21,19 @@
             controllerAs: 'nv'
           },
           content: {
-            templateUrl: 'app/main/main.html',
-            controller: 'MainController',
-            controllerAs: 'mn'
+            templateUrl: 'app/map/map.html',
+            controller: 'MapController',
+            controllerAs: 'mp'
+          }
+        }
+      })
+      .state('login', {
+        url: '/login',
+        views: {
+          content: {
+            templateUrl: 'app/login/login.html',
+            controller: 'LoginController',
+            controllerAs: 'lg'
           }
         }
       });

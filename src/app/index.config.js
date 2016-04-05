@@ -34,7 +34,8 @@
       .warnPalette('orange');
     // Register icons
     $mdIconProvider
-      .icon('logo-header', '/assets/images/logo-header.svg');
+      .icon('logo-header', '/assets/images/logo-header.svg')
+      .icon('logo-login', '/assets/images/logo-login.svg');
   }
 
 })();

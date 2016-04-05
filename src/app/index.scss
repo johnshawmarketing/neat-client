@@ -42,8 +42,18 @@
   font-feature-settings: 'liga';
 }
 
+
+/* ==================== Variables ==================== */
+
 $primary-color: #ff5252;
 $accent-color: #1f2532;
+
+
+/* ==================== Helpers ==================== */
+
+.dark-bg {
+  background: $accent-color;
+}
 
 /**
  *  Do not remove the comment below. It's the markers used by gulp-inject to inject

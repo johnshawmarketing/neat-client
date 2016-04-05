@@ -7,11 +7,11 @@
   color: #fff;
   text-decoration: none;
   text-transform: uppercase;
-  padding: 23px 36px 20px;
+  padding: 20px 36px 16px;
   position: relative;
   border-bottom: 3px solid transparent;
 
-  &.active {
+  &--active {
     border-bottom: 3px solid $primary-color;
   }
 }
