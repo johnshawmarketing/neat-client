@@ -1,0 +1,22 @@
+.head-logo {
+  height: 48px;
+  width: 128px;
+}
+
+.nav-link {
+  color: #fff;
+  text-decoration: none;
+  text-transform: uppercase;
+  padding: 23px 36px 20px;
+  position: relative;
+  border-bottom: 3px solid transparent;
+
+  &.active {
+    border-bottom: 3px solid $primary-color;
+  }
+}
+
+.btn-logout {
+  text-transform: none;
+  font-size: 20px;
+}
