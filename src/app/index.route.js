@@ -6,12 +6,16 @@
     .config(routerConfig);
 
   /** @ngInject */
-  function routerConfig($stateProvider, $urlRouterProvider) {
+  function routerConfig(
+    $stateProvider,
+    $locationProvider,
+    $urlRouterProvider
+  ) {
     $stateProvider
       .state('home', {
         url: '/',
         views: {
-          tnav: {
+          nav: {
             templateUrl: 'app/layout/nav.html',
             controller: 'NavController',
             controllerAs: 'nv'
@@ -25,6 +29,7 @@
       });
 
     $urlRouterProvider.otherwise('/');
+    $locationProvider.html5Mode(true);
   }
 
 })();
