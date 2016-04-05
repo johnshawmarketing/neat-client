@@ -6,15 +6,18 @@
     .controller('NavController', NavController);
 
   /** @ngInject */
-  function NavController($log) {
+  function NavController($state) {
     var vm = this;
 
-    vm.random = 'hello';
+    vm.logout = logout;
 
-    activate();
+    // activate();
 
     function activate() {
-      $log.log('Nav Controller loaded', vm.random);
+    }
+
+    function logout() {
+      $state.go('login');
     }
 
   }

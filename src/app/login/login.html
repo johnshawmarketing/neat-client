@@ -1,0 +1,32 @@
+<md-content
+  class="dark-bg"
+  layout="row"
+  layout-align="center center"
+  layout-fill>
+  <md-card
+    flex="30"
+    flex-lg="40"
+    flex-md="55"
+    flex-sm="90"
+    class="login-box md-whiteframe-6dp">
+    <md-icon md-svg-icon="logo-login" class="login-logo"></md-icon>
+    <form name="loginForm" class="login-form">
+      <md-input-container>
+        <label>Email</label>
+        <input ng-model="lg.email">
+      </md-input-container>
+      <md-input-container>
+        <label>Password</label>
+        <input ng-model="lg.password">
+      </md-input-container>
+    </form>
+    <md-card-actions layout="column">
+      <md-button
+        class="login-btn md-raised md-primary"
+        ng-click="lg.login()"
+        >
+        Login
+      </md-button>
+    </md-card-actions>
+  </md-card>
+</md-content>
