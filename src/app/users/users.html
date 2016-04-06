@@ -12,7 +12,26 @@
                 flex-md="70"
                 flex-sm="90"
                 flex-xs="100">
-      <md-subheader> Enabled Users </md-subheader>
+      <md-subheader class="user-subheader">
+        <md-menu>
+          <md-button class="md-btn--shrink" ng-click="$mdOpenMenu($event)">
+            enabled users
+            <i class="material-icons mi--mid">expand_more</i>
+          </md-button>
+          <md-menu-content>
+            <md-menu-item>
+              <md-button ng-disabled="true">
+                enabled users
+              </md-button>
+            </md-menu-item>
+            <md-menu-item>
+              <md-button>
+                disabled users
+              </md-button>
+            </md-menu-item>
+          </md-menu-content>
+        </md-menu>
+      </md-subheader>
       <md-list>
         <md-list-item class="md-2-line"
                       ng-repeat="user in us.users"
@@ -25,7 +44,7 @@
             <md-button ng-class="us.roleClass(user.privilege)"
                       ng-click="$mdOpenMenu($event)">
               {{ user.privilege == 'A' ? 'admin' : 'member' }}
-              <i class="material-icons mi--middle">arrow_drop_down</i>
+              <i class="material-icons mi--mid">arrow_drop_down</i>
             </md-button>
             <md-menu-content>
               <md-menu-item>

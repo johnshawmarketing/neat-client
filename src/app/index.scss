@@ -60,8 +60,20 @@ $light-bg-color: #fafafa;
   background: $light-bg-color;
 }
 
-.mi--middle {
+.pos-fixed {
+  position: fixed;
+}
+.pos-abs {
+  position: absolute;
+}
+
+/* material icon align */
+.mi--mid {
   vertical-align: middle;
+}
+
+.md-btn--shrink {
+  margin: 0;
 }
 
 .test {
