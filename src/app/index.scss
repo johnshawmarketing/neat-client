@@ -47,12 +47,25 @@
 
 $primary-color: #ff5252;
 $accent-color: #1f2532;
+$dark-bg-color: $accent-color;
+$light-bg-color: #fafafa;
 
 
 /* ==================== Helpers ==================== */
 
 .dark-bg {
-  background: $accent-color;
+  background: $dark-bg-color;
+}
+.light-bg {
+  background: $light-bg-color;
+}
+
+.mi--middle {
+  vertical-align: middle;
+}
+
+.test {
+  background: rgba(0, 0, 0, 0.1);
 }
 
 /**
