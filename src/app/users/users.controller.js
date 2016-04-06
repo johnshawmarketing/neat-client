@@ -45,6 +45,12 @@
           active: false
         },
         {
+          name: 'Random Name',
+          email: 'random@random.org',
+          privilege: 'M',
+          active: false
+        },
+        {
           name: 'John Shaw',
           email: 'john@gmail.com',
           privilege: 'A',
@@ -53,6 +59,12 @@
         {
           name: 'Rich Freeman',
           email: 'rich@gmail.com',
+          privilege: 'M',
+          active: true
+        },
+        {
+          name: 'Scott McDonald',
+          email: 'scott@McDonald.com',
           privilege: 'M',
           active: true
         }
