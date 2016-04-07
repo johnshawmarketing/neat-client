@@ -45,6 +45,30 @@
         active: true
       },
       {
+        name: 'Slevin',
+        email: 'slevin@gmail.com',
+        privilege: 'M',
+        active: false
+      },
+      {
+        name: 'Random Name',
+        email: 'random@random.org',
+        privilege: 'M',
+        active: true
+      },
+      {
+        name: 'John Shaw',
+        email: 'john@gmail.com',
+        privilege: 'A',
+        active: false
+      },
+      {
+        name: 'Rich Freeman',
+        email: 'rich@gmail.com',
+        privilege: 'M',
+        active: true
+      },
+      {
         name: 'Scott McDonald',
         email: 'scott@McDonald.com',
         privilege: 'M',
