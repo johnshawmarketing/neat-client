@@ -6,7 +6,7 @@
     .controller('UsersController', UsersController);
 
   /** @ngInject */
-  function UsersController(UserService, $mdDialog) {
+  function UsersController(UserService, $mdDialog, $mdToast, $element) {
     var vm = this;
 
     vm.roleClass = roleClass;
@@ -16,6 +16,7 @@
 
     function activate() {
       vm.users = getUsers();
+      console.log($element);
     }
 
     function roleClass(privilege) {
@@ -33,6 +34,7 @@
           ok: 'Delete',
           confirmAction: function confirmDelete() {
             vm.users.splice(idx, 1);
+            showConfirmToast();
           }
         },
         reset: {
@@ -42,12 +44,32 @@
           ok: 'Reset',
           confirmAction: function confirmReset() {
             vm.users[idx].active = false;
+            showConfirmToast();
           }
         }
       };
+
+      function showConfirmToast() {
+        return $mdToast.show(
+          $mdToast.simple()
+            .textContent(dialog[type].ok + ' ' + user.name + '!')
+            .position('bottom right')
+            .hideDelay(2000)
+        );
+      }
+
+      function showCancelToast() {
+        return $mdToast.show(
+          $mdToast.simple()
+            .textContent('Cancelled!')
+            .hideDelay(1000)
+        );
+      }
+
       function confirmTitle() {
         return 'Confirm to' + dialog[type].text + user.name;
       }
+
       var confirm = $mdDialog.confirm()
             .title(confirmTitle())
             .textContent(dialog[type].content)
@@ -58,10 +80,7 @@
 
       $mdDialog
         .show(confirm)
-        .then(dialog[type].confirmAction, cancelled);
-      function cancelled() {
-        console.log('cancelled delete');
-      }
+        .then(dialog[type].confirmAction, showCancelToast);
     }
 
     function getUsers(options) {
