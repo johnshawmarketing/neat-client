@@ -6,21 +6,33 @@
     .controller('UsersController', UsersController);
 
   /** @ngInject */
-  function UsersController(UserService, $mdDialog, $mdToast, $element) {
+  function UsersController(UserService, $mdDialog, $mdToast) {
     var vm = this;
+    var enabledUsers;
+    var disabledUsers;
 
+    vm.switchUsers = switchUsers;
     vm.roleClass = roleClass;
     vm.showConfirm = showConfirm;
 
     activate();
 
     function activate() {
-      vm.users = getUsers();
-      console.log($element);
+      enabledUsers = getUsers();
+      disabledUsers = getUsers({ disabled: true });
+      vm.users = enabledUsers;
+      vm.areEnabled = true;
+    }
+
+    function switchUsers() {
+      vm.areEnabled = !vm.areEnabled;
+      vm.users = vm.areEnabled
+        ? enabledUsers
+        : disabledUsers;
     }
 
     function roleClass(privilege) {
-      return privilege === 'A'
+      return privilege == 'A'
         ? 'md-warn'
         : 'md-accent md-hue-3';
     }
@@ -35,7 +47,8 @@
           confirmAction: function confirmDelete() {
             vm.users.splice(idx, 1);
             showConfirmToast();
-          }
+          },
+          done: 'Deleted '
         },
         reset: {
           text: ' reset ',
@@ -45,14 +58,15 @@
           confirmAction: function confirmReset() {
             vm.users[idx].active = false;
             showConfirmToast();
-          }
+          },
+          done: 'Reset '
         }
       };
 
       function showConfirmToast() {
         return $mdToast.show(
           $mdToast.simple()
-            .textContent(dialog[type].ok + ' ' + user.name + '!')
+            .textContent(dialog[type].done + user.name + '!')
             .position('bottom right')
             .hideDelay(2000)
         );
@@ -80,7 +94,7 @@
 
       $mdDialog
         .show(confirm)
-        .then(dialog[type].confirmAction, showCancelToast);
+        .then(dialog[type].confirmAction);
     }
 
     function getUsers(options) {

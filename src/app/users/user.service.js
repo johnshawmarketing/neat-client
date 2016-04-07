@@ -101,9 +101,6 @@
         if (options.disabled) {
           return disabledUsers;
         }
-        if (options.enabled === false || options.disabled === false) {
-          return [];
-        }
       }
       return enabledUsers;
     }

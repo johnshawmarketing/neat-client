@@ -15,18 +15,18 @@
       <md-subheader class="user-subheader">
         <md-menu>
           <md-button class="md-btn--shrink" ng-click="$mdOpenMenu($event)">
-            enabled users
+            {{ us.areEnabled ? 'Enabled Users' : 'Disabled Users' }}
             <i class="material-icons mi--mid">expand_more</i>
           </md-button>
           <md-menu-content>
             <md-menu-item>
               <md-button ng-disabled="true">
-                enabled users
+                {{ us.areEnabled ? 'Enabled Users' : 'Disabled Users' }}
               </md-button>
             </md-menu-item>
             <md-menu-item>
-              <md-button>
-                disabled users
+              <md-button ng-click="us.switchUsers()">
+                {{ !us.areEnabled ? 'Enabled Users' : 'Disabled Users' }}
               </md-button>
             </md-menu-item>
           </md-menu-content>
@@ -57,7 +57,7 @@
               </md-menu-item>
               <md-menu-item>
                 <md-button>
-                  {{ user.privilege == 'A' ? 'Member' : 'Admin' }}
+                  {{ user.privilege != 'A' ? 'Admin' : 'Member' }}
                 </md-button>
               </md-menu-item>
             </md-menu-content>
