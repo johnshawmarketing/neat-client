@@ -7,102 +7,88 @@
 
   /** @ngInject */
   function UserService() {
-    var enabledUsers = [
+    var users = [
       {
         name: 'David Parsons',
         email: 'David.Parsons@GeorgianCollege.ca',
         privilege: 'A',
-        active: true
+        password: true,
+        active: true,
+        hasRecord: true
       },
       {
         name: 'Martin Pennock',
         email: 'martin@gmail.com',
         privilege: 'A',
-        active: true
+        password: true,
+        active: true,
+        hasRecord: true
       },
       {
-        name: 'Slevin',
+        name: 'Slevin Zhang',
         email: 'slevin@gmail.com',
         privilege: 'M',
-        active: false
+        password: null,
+        active: false,
+        hasRecord: false
       },
       {
         name: 'Random Name',
         email: 'random@random.org',
         privilege: 'M',
-        active: true
+        password: true,
+        active: true,
+        hasRecord: false
       },
       {
         name: 'John Shaw',
         email: 'john@gmail.com',
         privilege: 'A',
-        active: false
+        password: null,
+        active: false,
+        hasRecord: true
       },
       {
         name: 'Rich Freeman',
         email: 'rich@gmail.com',
         privilege: 'M',
-        active: true
+        password: true,
+        active: true,
+        hasRecord: false
       },
-      {
-        name: 'Slevin',
-        email: 'slevin@gmail.com',
-        privilege: 'M',
-        active: false
-      },
-      {
-        name: 'Random Name',
-        email: 'random@random.org',
-        privilege: 'M',
-        active: true
-      },
-      {
-        name: 'John Shaw',
-        email: 'john@gmail.com',
-        privilege: 'A',
-        active: false
-      },
-      {
-        name: 'Rich Freeman',
-        email: 'rich@gmail.com',
-        privilege: 'M',
-        active: true
-      },
-      {
-        name: 'Scott McDonald',
-        email: 'scott@McDonald.com',
-        privilege: 'M',
-        active: true
-      }
-    ];
-    var disabledUsers = [
       {
         name: 'Bill Gates',
         email: 'bill@outlook.com',
         privilege: 'A',
-        active: null
+        password: true,
+        active: null,
+        hasRecord: true
       },
       {
         name: 'Steve Jobs',
         email: 'stevejobs@apple.heaven',
         privilege: 'M',
-        active: null
+        password: null,
+        active: null,
+        hasRecord: false
+      },
+      {
+        name: 'Scott McDonald',
+        email: 'scott@McDonald.com',
+        privilege: 'M',
+        password: true,
+        active: true,
+        hasRecord: true
       }
     ];
-
     var service = {
       getAll: getAll
     };
 
     return service;
 
-    function getAll(options) {
-      if (options) {
-        if (options.disabled) {
-          return disabledUsers;
-        }
-      }
-      return enabledUsers;
+    function getAll() {
+      return users;
     }
   }
 })();

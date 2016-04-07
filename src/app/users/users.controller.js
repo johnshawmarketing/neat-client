@@ -6,35 +6,52 @@
     .controller('UsersController', UsersController);
 
   /** @ngInject */
-  function UsersController(UserService, $mdDialog, $mdToast) {
+  function UsersController(
+    UserService,
+    $mdDialog,
+    $mdToast,
+    filterFilter
+  ) {
     var vm = this;
-    var enabledUsers;
-    var disabledUsers;
 
     vm.switchUsers = switchUsers;
     vm.roleClass = roleClass;
+    vm.resetText = resetText;
     vm.showConfirm = showConfirm;
 
     activate();
 
     function activate() {
-      enabledUsers = getUsers();
-      disabledUsers = getUsers({ disabled: true });
-      vm.users = enabledUsers;
-      vm.areEnabled = true;
+      vm.showEnabled = true;
+      vm.userFilter = enabledFilter;
+      vm.users = getUsers();
+    }
+
+    function enabledFilter(user) {
+      return user.active || user.active === false;
+    }
+
+    function disabledFilter(user) {
+      return user.active === null;
     }
 
     function switchUsers() {
-      vm.areEnabled = !vm.areEnabled;
-      vm.users = vm.areEnabled
-        ? enabledUsers
-        : disabledUsers;
+      vm.showEnabled = !vm.showEnabled;
+      vm.userFilter = vm.showEnabled
+        ? enabledFilter
+        : disabledFilter;
     }
 
     function roleClass(privilege) {
       return privilege == 'A'
         ? 'md-warn'
         : 'md-accent md-hue-3';
+    }
+
+    function resetText(user) {
+      if (user.active === null) return 'enable';
+      if (user.active) return 'reset';
+      return 'inactive';
     }
 
     function showConfirm(ev, idx, type, user) {
@@ -45,10 +62,10 @@
           ariaLabel: 'Confirm delete',
           ok: 'Delete',
           confirmAction: function confirmDelete() {
-            vm.users.splice(idx, 1);
+            user.active = null;
             showConfirmToast();
           },
-          done: 'Deleted '
+          done: 'Trashed '
         },
         reset: {
           text: ' reset ',
@@ -56,10 +73,21 @@
           ariaLabel: 'Confirm reset',
           ok: 'Reset',
           confirmAction: function confirmReset() {
-            vm.users[idx].active = false;
+            user.active = false;
             showConfirmToast();
           },
           done: 'Reset '
+        },
+        enable: {
+          text: ' enable ',
+          content: 'Will restore user to original state (active or inactive)',
+          ariaLabel: 'Confirm enable',
+          ok: 'Enable',
+          confirmAction: function confirmEnable() {
+            user.active = user.password ? true : false;
+            showConfirmToast();
+          },
+          done: 'Enabled '
         }
       };
 
