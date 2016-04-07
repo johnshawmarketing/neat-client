@@ -15,18 +15,18 @@
       <md-subheader class="user-subheader">
         <md-menu>
           <md-button class="md-btn--shrink" ng-click="$mdOpenMenu($event)">
-            enabled users
+            {{ us.showEnabled ? 'Enabled Users' : 'Disabled Users' }}
             <i class="material-icons mi--mid">expand_more</i>
           </md-button>
           <md-menu-content>
             <md-menu-item>
               <md-button ng-disabled="true">
-                enabled users
+                {{ us.showEnabled ? 'Enabled Users' : 'Disabled Users' }}
               </md-button>
             </md-menu-item>
             <md-menu-item>
-              <md-button>
-                disabled users
+              <md-button ng-click="us.switchUsers()">
+                {{ !us.showEnabled ? 'Enabled Users' : 'Disabled Users' }}
               </md-button>
             </md-menu-item>
           </md-menu-content>
@@ -34,7 +34,7 @@
       </md-subheader>
       <md-list>
         <md-list-item class="md-2-line"
-                      ng-repeat="user in us.users"
+                      ng-repeat="user in us.users | filter:us.userFilter"
                       ng-click="null">
           <div class="md-list-item-text" layout="column">
             <h3>{{ user.name }}</h3>
@@ -45,7 +45,8 @@
                    hide-sm
                    hide-xs>
             <md-button ng-class="us.roleClass(user.privilege)"
-                      ng-click="$mdOpenMenu($event)">
+                       ng-disabled="user.active === null"
+                       ng-click="$mdOpenMenu($event)">
               {{ user.privilege == 'A' ? 'Admin' : 'Member' }}
               <i class="material-icons mi--mid">arrow_drop_down</i>
             </md-button>
@@ -57,16 +58,16 @@
               </md-menu-item>
               <md-menu-item>
                 <md-button>
-                  {{ user.privilege == 'A' ? 'Member' : 'Admin' }}
+                  {{ user.privilege != 'A' ? 'Admin' : 'Member' }}
                 </md-button>
               </md-menu-item>
             </md-menu-content>
           </md-menu>
           <md-button class="md-secondary md-primary"
-                    ng-disabled="!user.active"
-                    ng-click="us.showConfirm($event,$index,'reset',user)"
-                    hide-xs>
-            {{ user.active ? 'reset' : 'inactive' }}
+              ng-disabled="user.active === false"
+              ng-click="us.showConfirm($event,$index,us.resetText(user),user)"
+              hide-xs>
+            {{ us.resetText(user) }}
           </md-button>
           <md-button class="md-secondary md-accent md-hue-1"
                      ng-click="us.showConfirm($event,$index,'del',user)"
