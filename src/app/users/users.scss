@@ -1,6 +1,6 @@
-md-list-item {
-  &.list-user {
-    min-height: 60px;
+.user-subheader {
+  >._md-subheader-inner {
+    padding: 10px;
   }
 }
 

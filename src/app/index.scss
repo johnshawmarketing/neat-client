@@ -51,7 +51,8 @@ $dark-bg-color: $accent-color;
 $light-bg-color: #fafafa;
 
 
-/* ==================== Helpers ==================== */
+
+/* ==================== General ==================== */
 
 .dark-bg {
   background: $dark-bg-color;
@@ -60,7 +61,45 @@ $light-bg-color: #fafafa;
   background: $light-bg-color;
 }
 
-.mi--middle {
+.md-fab--lg {
+  &.md-fab {
+    width: 70px;
+    height: 70px;
+  }
+}
+
+$btm-dist: 35%;
+$side-dist: 3%;
+.md-fab--add {
+  right: $side-dist;
+  bottom: $btm-dist;
+}
+.md-fab--search {
+  left: $side-dist;
+  bottom: $btm-dist;
+}
+
+.md-btn--shrink {
+  margin: 0;
+}
+
+md-toast {
+  position: fixed;
+}
+
+
+
+/* ==================== Helpers ==================== */
+
+.pos-fixed {
+  position: fixed;
+}
+.pos-abs {
+  position: absolute;
+}
+
+/* material icon align */
+.mi--mid {
   vertical-align: middle;
 }
 

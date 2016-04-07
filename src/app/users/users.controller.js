@@ -6,16 +6,17 @@
     .controller('UsersController', UsersController);
 
   /** @ngInject */
-  function UsersController($log) {
+  function UsersController(UserService, $mdDialog, $mdToast, $element) {
     var vm = this;
 
-    vm.privileges = ['Admin', 'Member'];
     vm.roleClass = roleClass;
+    vm.showConfirm = showConfirm;
 
     activate();
 
     function activate() {
       vm.users = getUsers();
+      console.log($element);
     }
 
     function roleClass(privilege) {
@@ -24,39 +25,66 @@
         : 'md-accent md-hue-3';
     }
 
-    function getUsers() {
-      return [
-        {
-          name: 'David Parsons',
-          email: 'David.Parsons@GeorgianCollege.ca',
-          privilege: 'A',
-          active: true
+    function showConfirm(ev, idx, type, user) {
+      var dialog = {
+        del: {
+          text: ' delete ',
+          content: 'If the user has associated records, user will be disabled instead. Switch to disabled users view to perform hard delete.',
+          ariaLabel: 'Confirm delete',
+          ok: 'Delete',
+          confirmAction: function confirmDelete() {
+            vm.users.splice(idx, 1);
+            showConfirmToast();
+          }
         },
-        {
-          name: 'Martin Pennock',
-          email: 'martin@gmail.com',
-          privilege: 'A',
-          active: true
-        },
-        {
-          name: 'Slevin',
-          email: 'slevin@gmail.com',
-          privilege: 'M',
-          active: false
-        },
-        {
-          name: 'John Shaw',
-          email: 'john@gmail.com',
-          privilege: 'A',
-          active: false
-        },
-        {
-          name: 'Rich Freeman',
-          email: 'rich@gmail.com',
-          privilege: 'M',
-          active: true
+        reset: {
+          text: ' reset ',
+          content: 'Deactivate user and reset password. Once reset, user need to go through sign up process same as new user',
+          ariaLabel: 'Confirm reset',
+          ok: 'Reset',
+          confirmAction: function confirmReset() {
+            vm.users[idx].active = false;
+            showConfirmToast();
+          }
         }
-      ];
+      };
+
+      function showConfirmToast() {
+        return $mdToast.show(
+          $mdToast.simple()
+            .textContent(dialog[type].ok + ' ' + user.name + '!')
+            .position('bottom right')
+            .hideDelay(2000)
+        );
+      }
+
+      function showCancelToast() {
+        return $mdToast.show(
+          $mdToast.simple()
+            .textContent('Cancelled!')
+            .hideDelay(1000)
+        );
+      }
+
+      function confirmTitle() {
+        return 'Confirm to' + dialog[type].text + user.name;
+      }
+
+      var confirm = $mdDialog.confirm()
+            .title(confirmTitle())
+            .textContent(dialog[type].content)
+            .ariaLabel(dialog[type].ariaLabel)
+            .targetEvent(ev)
+            .ok(dialog[type].ok)
+            .cancel('Cancel');
+
+      $mdDialog
+        .show(confirm)
+        .then(dialog[type].confirmAction, showCancelToast);
+    }
+
+    function getUsers(options) {
+      return UserService.getAll(options);
     }
 
   }
