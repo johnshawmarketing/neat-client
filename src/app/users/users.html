@@ -3,7 +3,7 @@
   layout="column"
   layout-fill>
   <div layout="row">
-    <p>This is first row</p>
+    <p></p>
   </div>
   <div layout="row" layout-align="center start">
     <md-content class="light-bg"
@@ -71,14 +71,16 @@
           </md-menu>
           <md-button class="md-secondary md-primary"
             ng-disabled="user.active === false"
-            ng-click="us.dialog.showConfirm($event,$index,us.resetText(user),user)"
+            ng-click="us.showConfirm($event,$index,us.resetText(user),user)"
             hide-xs>
             {{ us.resetText(user) }}
           </md-button>
           <md-button class="md-secondary md-accent md-hue-1"
-                     ng-click="us.dialog.showConfirm($event,$index,'del',user)"
+                     ng-click="us.showConfirm($event,$index,'del',user)"
                      aria-label="Delete user">
-            <i class="material-icons mi--mid">delete</i>
+            <i class="material-icons mi--mid">
+              {{ user.active === null ? 'delete_forever' : 'delete' }}
+            </i>
           </md-button>
           <md-divider></md-divider>
         </md-list-item>
@@ -87,11 +89,13 @@
   </div>
   <md-button class="md-fab md-fab--lg md-fab--search pos-fixed"
              ng-click="us.focusSearch($event)"
-             aria-label="Add user">
+             aria-label="Search user">
     <i class="material-icons mi--mid">search</i>
   </md-button>
   <md-button class="md-fab md-primary md-fab--lg md-fab--add pos-fixed"
              aria-label="Add user">
-    <i class="material-icons mi--mid">add</i>
+    <i class="material-icons mi--mid">
+      {{ us.showEnabled ? 'add' : 'delete_sweep' }}
+    </i>
   </md-button>
 </div>

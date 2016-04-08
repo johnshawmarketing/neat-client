@@ -13,7 +13,6 @@
     var vm = this;
     var searchField;
 
-    vm.dialog = UserDialog;
     vm.switchUsers = switchUsers;
     vm.roleClass = roleClass;
     vm.resetText = resetText;
@@ -25,6 +24,7 @@
       vm.showEnabled = true;
       vm.statusFilter = enabledFilter;
       vm.users = getUsers();
+      vm.showConfirm = UserDialog.initShowConfirm(vm.users);
       angular.element(document).ready(getSearchField);
       function getSearchField() {
         searchField = document.getElementById('user-search');
