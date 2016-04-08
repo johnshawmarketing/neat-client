@@ -3,12 +3,13 @@
 
   angular
     .module('neatClient')
-    .factory('UserService', UserService);
+    .factory('UserData', UserData);
 
   /** @ngInject */
-  function UserService() {
+  function UserData() {
     var users = [
       {
+        id: 1,
         name: 'David Parsons',
         email: 'David.Parsons@GeorgianCollege.ca',
         privilege: 'A',
@@ -17,6 +18,7 @@
         hasRecord: true
       },
       {
+        id: 2,
         name: 'Martin Pennock',
         email: 'martin@gmail.com',
         privilege: 'A',
@@ -25,6 +27,7 @@
         hasRecord: true
       },
       {
+        id: 3,
         name: 'Slevin Zhang',
         email: 'slevin@gmail.com',
         privilege: 'M',
@@ -33,6 +36,7 @@
         hasRecord: false
       },
       {
+        id: 4,
         name: 'Random Name',
         email: 'random@random.org',
         privilege: 'M',
@@ -41,6 +45,7 @@
         hasRecord: false
       },
       {
+        id: 5,
         name: 'John Shaw',
         email: 'john@gmail.com',
         privilege: 'A',
@@ -49,6 +54,7 @@
         hasRecord: true
       },
       {
+        id: 6,
         name: 'Rich Freeman',
         email: 'rich@gmail.com',
         privilege: 'M',
@@ -57,6 +63,7 @@
         hasRecord: false
       },
       {
+        id: 7,
         name: 'Bill Gates',
         email: 'bill@outlook.com',
         privilege: 'A',
@@ -65,6 +72,7 @@
         hasRecord: true
       },
       {
+        id: 8,
         name: 'Steve Jobs',
         email: 'stevejobs@apple.heaven',
         privilege: 'M',
@@ -73,6 +81,7 @@
         hasRecord: false
       },
       {
+        id: 9,
         name: 'Scott McDonald',
         email: 'scott@McDonald.com',
         privilege: 'M',

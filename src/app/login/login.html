@@ -16,11 +16,22 @@
       <div layout="column">
         <md-input-container>
           <label>Email</label>
-          <input ng-model="lg.email">
+          <input name="email"
+                 type="email"
+                 required
+                 ng-pattern="/^.+@.+\..+$/"
+                 ng-model="lg.email">
+          <div ng-messages="loginForm.email.$error">
+            <div ng-message="required">Email Required</div>
+            <div ng-message="pattern">Invalid Email</div>
+          </div>
         </md-input-container>
         <md-input-container>
           <label>Password</label>
-          <input ng-model="lg.password">
+          <input type="password" name="password" required ng-model="lg.password">
+          <div ng-messages="loginForm.password.$error">
+            <div ng-message="required">Password required</div>
+          </div>
         </md-input-container>
       </div>
     </form>

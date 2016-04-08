@@ -2,11 +2,8 @@
   class="light-bg nav-padding"
   layout="column"
   layout-fill>
-  <div layout="row">
-    <p>This is first row</p>
-  </div>
   <div layout="row" layout-align="center start">
-    <md-content class="light-bg"
+    <md-content class="light-bg user-content"
                 flex="50"
                 flex-lg="60"
                 flex-md="70"
@@ -31,11 +28,17 @@
             </md-menu-item>
           </md-menu-content>
         </md-menu>
+        <md-input-container class="user-search" md-no-float>
+          <input id="user-search"
+                 type="text"
+                 ng-model="us.search"
+                 placeholder="Search">
+        </md-input-container>
       </md-subheader>
       <md-list>
         <md-list-item class="md-2-line"
-                      ng-repeat="user in us.users | filter:us.userFilter"
-                      ng-click="null">
+        ng-repeat="user in us.users | filter:us.statusFilter | filter:us.search"
+        ng-click="null">
           <div class="md-list-item-text" layout="column">
             <h3>{{ user.name }}</h3>
             <p>{{ user.email }}</p>
@@ -64,15 +67,17 @@
             </md-menu-content>
           </md-menu>
           <md-button class="md-secondary md-primary"
-              ng-disabled="user.active === false"
-              ng-click="us.showConfirm($event,$index,us.resetText(user),user)"
-              hide-xs>
+            ng-disabled="user.active === false"
+            ng-click="us.showConfirm($event,$index,us.resetText(user),user)"
+            hide-xs>
             {{ us.resetText(user) }}
           </md-button>
           <md-button class="md-secondary md-accent md-hue-1"
                      ng-click="us.showConfirm($event,$index,'del',user)"
                      aria-label="Delete user">
-            <i class="material-icons mi--mid">delete</i>
+            <i class="material-icons mi--mid">
+              {{ user.active === null ? 'delete_forever' : 'delete' }}
+            </i>
           </md-button>
           <md-divider></md-divider>
         </md-list-item>
@@ -80,11 +85,15 @@
     </md-content>
   </div>
   <md-button class="md-fab md-fab--lg md-fab--search pos-fixed"
-             aria-label="Add user">
+             ng-click="us.focusSearch()"
+             aria-label="Search user">
     <i class="material-icons mi--mid">search</i>
   </md-button>
   <md-button class="md-fab md-primary md-fab--lg md-fab--add pos-fixed"
+             ng-click="us.addOrDeleteAll($event)"
              aria-label="Add user">
-    <i class="material-icons mi--mid">add</i>
+    <i class="material-icons mi--mid">
+      {{ us.showEnabled ? 'add' : 'delete_sweep' }}
+    </i>
   </md-button>
 </div>
