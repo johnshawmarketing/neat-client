@@ -9,22 +9,27 @@
   function UsersController(
     UserService,
     $mdDialog,
-    $mdToast,
-    filterFilter
+    $mdToast
   ) {
     var vm = this;
+    var searchField;
 
     vm.switchUsers = switchUsers;
     vm.roleClass = roleClass;
     vm.resetText = resetText;
+    vm.focusSearch = focusSearch;
     vm.showConfirm = showConfirm;
 
     activate();
 
     function activate() {
       vm.showEnabled = true;
-      vm.userFilter = enabledFilter;
+      vm.statusFilter = enabledFilter;
       vm.users = getUsers();
+      angular.element(document).ready(getSearchField);
+      function getSearchField() {
+        searchField = document.getElementById('user-search');
+      }
     }
 
     function enabledFilter(user) {
@@ -37,7 +42,7 @@
 
     function switchUsers() {
       vm.showEnabled = !vm.showEnabled;
-      vm.userFilter = vm.showEnabled
+      vm.statusFilter = vm.showEnabled
         ? enabledFilter
         : disabledFilter;
     }
@@ -52,6 +57,13 @@
       if (user.active === null) return 'enable';
       if (user.active) return 'reset';
       return 'inactive';
+    }
+
+    function focusSearch(ev) {
+      ev.preventDefault();
+      console.log('clicked');
+      console.log(searchField);
+      searchField.focus();
     }
 
     function showConfirm(ev, idx, type, user) {

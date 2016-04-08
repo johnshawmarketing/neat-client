@@ -31,11 +31,17 @@
             </md-menu-item>
           </md-menu-content>
         </md-menu>
+        <md-input-container class="user-search" md-no-float>
+          <input id="user-search"
+                 type="text"
+                 ng-model="us.search"
+                 placeholder="Search">
+        </md-input-container>
       </md-subheader>
       <md-list>
         <md-list-item class="md-2-line"
-                      ng-repeat="user in us.users | filter:us.userFilter"
-                      ng-click="null">
+        ng-repeat="user in us.users | filter:us.statusFilter | filter:us.search"
+        ng-click="null">
           <div class="md-list-item-text" layout="column">
             <h3>{{ user.name }}</h3>
             <p>{{ user.email }}</p>
@@ -80,6 +86,7 @@
     </md-content>
   </div>
   <md-button class="md-fab md-fab--lg md-fab--search pos-fixed"
+             ng-click="us.focusSearch($event)"
              aria-label="Add user">
     <i class="material-icons mi--mid">search</i>
   </md-button>
