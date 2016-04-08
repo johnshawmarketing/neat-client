@@ -4,6 +4,6 @@
 
   angular
     .module('neatClient')
-    .constant('moment', moment);
+    .constant('baseUrl', 'http://localhost:4000/api');
 
 })();

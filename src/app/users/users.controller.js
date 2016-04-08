@@ -8,11 +8,15 @@
   /** @ngInject */
   function UsersController(
     UserData,
+    $log,
     UserDialog
   ) {
     var vm = this;
+    var users = [];
+    var disabledUsers = [];
     var searchField;
     var showAdd;
+    var successUsers = successInfo('Loaded Users');
 
     vm.switchUsers = switchUsers;
     vm.addOrDeleteAll = addOrDeleteAll;
@@ -25,35 +29,50 @@
     function activate() {
       angular.element(document).ready(getSearchField);
       vm.showEnabled = true;
-      vm.statusFilter = enabledFilter;
-      vm.users = getUsers();
       vm.showConfirm = UserDialog.initShowConfirm(vm.users);
       showAdd = UserDialog.initAddDialog(vm.users);
+      return getUsers().then(successUsers);
       function getSearchField() {
         searchField = document.getElementById('user-search');
       }
     }
 
+    function successInfo(message) {
+      return function() {
+        $log.info(message);
+      };
+    }
+
+    function getUsers() {
+      return UserData.getUsers()
+        .then(assignUsers(users));
+    }
+
+    function assignUsers(users) {
+      return function(data) {
+        users = data;
+        vm.users = users;
+        return vm.users;
+      };
+    }
+
+    function getDisabledUsers() {
+      return UserData.getDisabledUsers()
+        .then(assignUsers(disabledUsers));
+    }
+
     function switchUsers() {
       vm.showEnabled = !vm.showEnabled;
-      vm.statusFilter = vm.showEnabled
-        ? enabledFilter
-        : disabledFilter;
-    }
-
-    function enabledFilter(user) {
-      return user.active || user.active === false;
-    }
-
-    function disabledFilter(user) {
-      return user.active === null;
+      return vm.showEnabled
+        ? getUsers().then(successUsers)
+        : getDisabledUsers().then(successInfo('Loaded Disabled Users'));
     }
 
     function addOrDeleteAll(ev) {
       if (vm.showEnabled) {
         showAdd(ev);
       } else {
-        console.log('delete all');
+        $log.log('delete all');
       }
     }
 
@@ -71,10 +90,6 @@
 
     function focusSearch() {
       searchField.focus();
-    }
-
-    function getUsers(options) {
-      return UserData.getAll(options);
     }
 
   }
