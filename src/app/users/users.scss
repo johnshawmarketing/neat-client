@@ -4,6 +4,13 @@
   }
 }
 
+.user-content {
+  padding: {
+    top: 40px;
+    bottom: 80px;
+  }
+}
+
 .user-search {
   width: 50%;
   margin: 0 0 0 5%;
@@ -11,4 +18,9 @@
   >.md-errors-spacer {
     float: none;
   }
+}
+
+.btn-role {
+  display: inline-block;
+  margin-right: 40px;
 }

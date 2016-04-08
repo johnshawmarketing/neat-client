@@ -2,11 +2,8 @@
   class="light-bg nav-padding"
   layout="column"
   layout-fill>
-  <div layout="row">
-    <p></p>
-  </div>
   <div layout="row" layout-align="center start">
-    <md-content class="light-bg"
+    <md-content class="light-bg user-content"
                 flex="50"
                 flex-lg="60"
                 flex-md="70"
@@ -88,11 +85,12 @@
     </md-content>
   </div>
   <md-button class="md-fab md-fab--lg md-fab--search pos-fixed"
-             ng-click="us.focusSearch($event)"
+             ng-click="us.focusSearch()"
              aria-label="Search user">
     <i class="material-icons mi--mid">search</i>
   </md-button>
   <md-button class="md-fab md-primary md-fab--lg md-fab--add pos-fixed"
+             ng-click="us.addOrDeleteAll($event)"
              aria-label="Add user">
     <i class="material-icons mi--mid">
       {{ us.showEnabled ? 'add' : 'delete_sweep' }}

@@ -12,8 +12,10 @@
   ) {
     var vm = this;
     var searchField;
+    var showAdd;
 
     vm.switchUsers = switchUsers;
+    vm.addOrDeleteAll = addOrDeleteAll;
     vm.roleClass = roleClass;
     vm.resetText = resetText;
     vm.focusSearch = focusSearch;
@@ -21,11 +23,12 @@
     activate();
 
     function activate() {
+      angular.element(document).ready(getSearchField);
       vm.showEnabled = true;
       vm.statusFilter = enabledFilter;
       vm.users = getUsers();
       vm.showConfirm = UserDialog.initShowConfirm(vm.users);
-      angular.element(document).ready(getSearchField);
+      showAdd = UserDialog.initAddDialog(vm.users);
       function getSearchField() {
         searchField = document.getElementById('user-search');
       }
@@ -46,6 +49,14 @@
       return user.active === null;
     }
 
+    function addOrDeleteAll(ev) {
+      if (vm.showEnabled) {
+        showAdd(ev);
+      } else {
+        console.log('delete all');
+      }
+    }
+
     function roleClass(privilege) {
       return privilege == 'A'
         ? 'md-warn'
@@ -58,8 +69,7 @@
       return 'inactive';
     }
 
-    function focusSearch(ev) {
-      ev.preventDefault();
+    function focusSearch() {
       searchField.focus();
     }
 

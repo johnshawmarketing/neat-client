@@ -12,7 +12,8 @@
     $mdToast
   ) {
     var service = {
-      initShowConfirm: initShowConfirm
+      initShowConfirm: initShowConfirm,
+      initAddDialog: initAddDialog
     };
 
     return service;
@@ -36,7 +37,7 @@
             ariaLabel: 'Confirm reset',
             ok: 'Reset',
             confirmAction: function confirmReset() {
-              UserActions.resetUser(user, confirmToast);
+              UserActions.resetUser(user);
             }
           },
           enable: {
@@ -49,23 +50,6 @@
             }
           }
         };
-
-        function confirmToast(message) {
-          return $mdToast.show(
-            $mdToast.simple()
-              .textContent(message)
-              .position('bottom right')
-              .hideDelay(2000)
-          );
-        }
-
-        function cancelToast() {
-          return $mdToast.show(
-            $mdToast.simple()
-              .textContent('Cancelled!')
-              .hideDelay(1000)
-          );
-        }
 
         function confirmTitle() {
           return 'Confirm to' + dialog[type].text + user.name;
@@ -83,6 +67,56 @@
           .show(confirm)
           .then(dialog[type].confirmAction);
       };
+    } // init showConfirm
+
+    function confirmToast(message) {
+      return $mdToast.show(
+        $mdToast.simple()
+        .textContent(message)
+        .position('bottom right')
+        .hideDelay(2000)
+      );
     }
-  }
+
+    function cancelToast() {
+      return $mdToast.show(
+        $mdToast.simple()
+        .textContent('Cancelled!')
+        .hideDelay(1000)
+      );
+    }
+
+    function initAddDialog(users) {
+
+      return function showAdd(ev) {
+        $mdDialog.show({
+          controller: AddDialogController,
+          templateUrl: 'app/users/add.dialog.html',
+          parent: angular.element(document.body),
+          targetEvent: ev,
+          clickOutsideToClose: true
+        });
+      };
+
+      function AddDialogController($scope, $mdDialog) {
+        $scope.privilege = 'M';
+
+        $scope.cancel = function() {
+          $mdDialog.cancel();
+        };
+
+        $scope.add = function() {
+          UserActions.addUser(
+            $scope.email,
+            $scope.name,
+            $scope.privilege,
+            users,
+            confirmToast
+          );
+          $mdDialog.hide();
+        };
+      }
+    } // init addDialog
+
+  } // UserDialog Service
 })();
