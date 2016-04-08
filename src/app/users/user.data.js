@@ -3,10 +3,10 @@
 
   angular
     .module('neatClient')
-    .factory('UserService', UserService);
+    .factory('UserData', UserData);
 
   /** @ngInject */
-  function UserService() {
+  function UserData() {
     var users = [
       {
         name: 'David Parsons',

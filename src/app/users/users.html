@@ -70,13 +70,13 @@
             </md-menu-content>
           </md-menu>
           <md-button class="md-secondary md-primary"
-              ng-disabled="user.active === false"
-              ng-click="us.showConfirm($event,$index,us.resetText(user),user)"
-              hide-xs>
+            ng-disabled="user.active === false"
+            ng-click="us.dialog.showConfirm($event,$index,us.resetText(user),user)"
+            hide-xs>
             {{ us.resetText(user) }}
           </md-button>
           <md-button class="md-secondary md-accent md-hue-1"
-                     ng-click="us.showConfirm($event,$index,'del',user)"
+                     ng-click="us.dialog.showConfirm($event,$index,'del',user)"
                      aria-label="Delete user">
             <i class="material-icons mi--mid">delete</i>
           </md-button>
