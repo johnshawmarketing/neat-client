@@ -84,7 +84,7 @@
     function changeRole(user) {
       var privilege = user.privilege == 'A' ? 'M' : 'A';
       UserData.updateRole(user.id, privilege)
-        .then(function(data) {
+        .then(function() {
           user.privilege = privilege;
         });
     }

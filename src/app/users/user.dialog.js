@@ -51,7 +51,7 @@
           ariaLabel: 'Confirm reset',
           ok: 'Reset',
           confirmAction: function confirmReset() {
-            UserData.resetUser(user.id).then(function(data) {
+            UserData.resetUser(user.id).then(function() {
               user.active = false;
               confirmToast('Reset ' + user.name);
             });
@@ -63,7 +63,7 @@
           ariaLabel: 'Confirm enable',
           ok: 'Enable',
           confirmAction: function confirmEnable() {
-            UserData.enableUser(user.id).then(function(data) {
+            UserData.enableUser(user.id).then(function() {
               users.splice(idx, 1);
               confirmToast('Enabled ' + user.name);
             });
