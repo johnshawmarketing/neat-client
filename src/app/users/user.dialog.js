@@ -8,7 +8,6 @@
   /** @ngInject */
   function UserDialog(
     $mdDialog,
-    UserActions,
     UserData,
     $mdToast
   ) {
