@@ -11,7 +11,10 @@
                 flex-xs="100">
       <md-subheader class="user-subheader">
         <md-menu>
-          <md-button class="md-btn--shrink" ng-click="$mdOpenMenu($event)">
+          <md-button
+            class="md-btn--shrink"
+            ng-disabled="!us.isAdmin()"
+            ng-click="$mdOpenMenu($event)">
             {{ us.showEnabled ? 'Enabled Users' : 'Disabled Users' }}
             <i class="material-icons mi--mid">expand_more</i>
           </md-button>
@@ -48,7 +51,7 @@
                    hide-sm
                    hide-xs>
             <md-button ng-class="us.roleClass(user.privilege)"
-                       ng-disabled="user.disabled"
+              ng-disabled="user.disabled || us.isSelf(user.id) || !us.isAdmin()"
                        ng-click="$mdOpenMenu($event)">
               {{ user.privilege == 'A' ? 'Admin' : 'Member' }}
               <i class="material-icons mi--mid">arrow_drop_down</i>
@@ -67,12 +70,14 @@
             </md-menu-content>
           </md-menu>
           <md-button class="md-secondary md-primary"
-            ng-disabled="!user.disabled && !user.active"
+                     ng-if="us.isAdmin()"
+              ng-disabled="us.isSelf(user.id) || !user.disabled && !user.active"
         ng-click="us.showConfirm($event,$index,us.resetText(user),user,us.users)"
-            hide-xs>
+        hide-xs>
             {{ us.resetText(user) }}
           </md-button>
           <md-button class="md-secondary md-accent md-hue-1"
+                    ng-disabled="us.isSelf(user.id) || !us.isAdmin()"
                     ng-click="us.showConfirm($event,$index,'del',user,us.users)"
                     aria-label="Delete user">
             <i class="material-icons mi--mid">
@@ -90,6 +95,7 @@
     <i class="material-icons mi--mid">search</i>
   </md-button>
   <md-button class="md-fab md-primary md-fab--lg md-fab--add pos-fixed"
+             ng-if="us.isAdmin()"
              ng-click="us.addOrDeleteAll($event)"
              aria-label="Add user">
     <i class="material-icons mi--mid">
