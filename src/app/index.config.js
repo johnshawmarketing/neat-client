@@ -8,11 +8,15 @@
   /** @ngInject */
   function config(
     $logProvider,
+    $httpProvider,
     $mdThemingProvider,
     $mdIconProvider
   ) {
     // Enable log
     $logProvider.debugEnabled(true);
+
+    $httpProvider.interceptors.push('AuthInterceptor');
+
     // Custom themes
     var neatGrey = $mdThemingProvider.extendPalette('blue-grey', {
       '900': '#1f2532'
@@ -20,6 +24,7 @@
     var neatRed = $mdThemingProvider.extendPalette('red', {
       '400': '#ff5252'
     });
+
     $mdThemingProvider
       .definePalette('neatGrey', neatGrey)
       .definePalette('neatRed', neatRed)
@@ -32,6 +37,7 @@
         'hue-2': '500'
       })
       .warnPalette('orange');
+
     // Register icons
     $mdIconProvider
       .icon('logo-header', '/assets/images/logo-header.svg')

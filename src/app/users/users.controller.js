@@ -10,6 +10,7 @@
     UserData,
     $log,
     $document,
+    AuthService,
     UserDialog
   ) {
     var vm = this;
@@ -18,6 +19,8 @@
     var searchField;
     var showAdd = UserDialog.showAdd;
 
+    vm.isAdmin = AuthService.isAdmin;
+    vm.isSelf = AuthService.isSelf;
     vm.switchUsers = switchUsers;
     vm.showConfirm = UserDialog.showConfirm;
     vm.addOrDeleteAll = addOrDeleteAll;

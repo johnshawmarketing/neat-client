@@ -7,7 +7,7 @@
 
   /** @ngInject */
   function UserData(
-    baseUrl,
+    url,
     $q,
     $log,
     $http
@@ -124,10 +124,5 @@
       return 'XHR ' + name + ' by ' + id + ' failed';
     }
 
-    function url(path, id) {
-      path = baseUrl + path;
-      if (id) path += '/' + id;
-      return path;
-    }
   }
 })();

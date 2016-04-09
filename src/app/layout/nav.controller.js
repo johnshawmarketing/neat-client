@@ -6,17 +6,21 @@
     .controller('NavController', NavController);
 
   /** @ngInject */
-  function NavController($state) {
+  function NavController(
+    $state,
+    AuthService
+  ) {
     var vm = this;
 
     vm.logout = logout;
 
-    // activate();
+    activate();
 
     function activate() {
     }
 
     function logout() {
+      AuthService.logout();
       $state.go('login');
     }
 
