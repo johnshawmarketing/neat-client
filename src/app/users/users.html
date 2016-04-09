@@ -48,7 +48,7 @@
                    hide-sm
                    hide-xs>
             <md-button ng-class="us.roleClass(user.privilege)"
-                       ng-disabled="user.disabled === true"
+                       ng-disabled="user.disabled"
                        ng-click="$mdOpenMenu($event)">
               {{ user.privilege == 'A' ? 'Admin' : 'Member' }}
               <i class="material-icons mi--mid">arrow_drop_down</i>
@@ -60,23 +60,23 @@
                 </md-button>
               </md-menu-item>
               <md-menu-item>
-                <md-button>
+                <md-button ng-click="us.changeRole(user)">
                   {{ user.privilege != 'A' ? 'Admin' : 'Member' }}
                 </md-button>
               </md-menu-item>
             </md-menu-content>
           </md-menu>
           <md-button class="md-secondary md-primary"
-            ng-disabled="user.active === false"
-            ng-click="us.showConfirm($event,$index,us.resetText(user),user)"
+            ng-disabled="!user.disabled && !user.active"
+        ng-click="us.showConfirm($event,$index,us.resetText(user),user,us.users)"
             hide-xs>
             {{ us.resetText(user) }}
           </md-button>
           <md-button class="md-secondary md-accent md-hue-1"
-                     ng-click="us.showConfirm($event,$index,'del',user)"
-                     aria-label="Delete user">
+                    ng-click="us.showConfirm($event,$index,'del',user,us.users)"
+                    aria-label="Delete user">
             <i class="material-icons mi--mid">
-              {{ user.disabled === true ? 'delete_forever' : 'delete' }}
+              {{ user.disabled ? 'delete_forever' : 'delete' }}
             </i>
           </md-button>
           <md-divider></md-divider>
