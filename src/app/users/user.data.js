@@ -6,98 +6,128 @@
     .factory('UserData', UserData);
 
   /** @ngInject */
-  function UserData() {
-    var users = [
-      {
-        id: 1,
-        name: 'David Parsons',
-        email: 'David.Parsons@GeorgianCollege.ca',
-        privilege: 'A',
-        password: true,
-        active: true,
-        hasRecord: true
-      },
-      {
-        id: 2,
-        name: 'Martin Pennock',
-        email: 'martin@gmail.com',
-        privilege: 'A',
-        password: true,
-        active: true,
-        hasRecord: true
-      },
-      {
-        id: 3,
-        name: 'Slevin Zhang',
-        email: 'slevin@gmail.com',
-        privilege: 'M',
-        password: null,
-        active: false,
-        hasRecord: false
-      },
-      {
-        id: 4,
-        name: 'Random Name',
-        email: 'random@random.org',
-        privilege: 'M',
-        password: true,
-        active: true,
-        hasRecord: false
-      },
-      {
-        id: 5,
-        name: 'John Shaw',
-        email: 'john@gmail.com',
-        privilege: 'A',
-        password: null,
-        active: false,
-        hasRecord: true
-      },
-      {
-        id: 6,
-        name: 'Rich Freeman',
-        email: 'rich@gmail.com',
-        privilege: 'M',
-        password: true,
-        active: true,
-        hasRecord: false
-      },
-      {
-        id: 7,
-        name: 'Bill Gates',
-        email: 'bill@outlook.com',
-        privilege: 'A',
-        password: true,
-        active: null,
-        hasRecord: true
-      },
-      {
-        id: 8,
-        name: 'Steve Jobs',
-        email: 'stevejobs@apple.heaven',
-        privilege: 'M',
-        password: null,
-        active: null,
-        hasRecord: false
-      },
-      {
-        id: 9,
-        name: 'Scott McDonald',
-        email: 'scott@McDonald.com',
-        privilege: 'M',
-        password: true,
-        active: true,
-        hasRecord: true
-      }
-    ];
+  function UserData(
+    baseUrl,
+    $q,
+    $log,
+    $http
+  ) {
+
     var service = {
-      getAll: getAll
+      getUsers: getUsers,
+      getDisabledUsers: getDisabledUsers,
+      createUser: createUser,
+      resetUser: resetUser,
+      updateRole: updateRole,
+      enableUser: enableUser,
+      deleteUser: deleteUser,
+      deleteAllDisabled: deleteAllDisabled
     };
 
     return service;
 
-    function getAll() {
+    /////////////////////////////////
+    // GET
+    // /////////////////////////////
+    function getUsers() {
+      return $http.get(url('/users'))
+        .then(getUsersComplete)
+        .catch(catchErrorFn('XHR getUsers failed'));
+    }
+
+    function getDisabledUsers() {
+      return $http.get(url('/users?disabled=1'))
+        .then(getUsersComplete)
+        .catch(catchErrorFn('XHR getDisabledUsers failed'));
+    }
+
+    /////////////////////////////////
+    // Promise Fulfilled / Rejected
+    // /////////////////////////////
+    function getUsersComplete(data) {
+      var users = data.data.users;
       return users;
+    }
+
+    function actionComplete(data) {
+      return data.data;
+    }
+
+    function catchErrorFn(errMsg) {
+
+      return function requestFailed(e) {
+        var newMessage = errMsg;
+        if (e.data && e.data.description) {
+          newMessage += '\n' + e.data.description;
+        }
+        if (e.data) {
+          e.data.description = newMessage;
+        }
+        $log.error(e.data);
+        return $q.reject(e);
+      };
+    }
+
+    /////////////////////////////////
+    // POST
+    // /////////////////////////////
+    function createUser(user) {
+      return $http.post(url('/users'), user)
+        .then(actionComplete)
+        .catch(catchErrorFn('XHR createUser failed'));
+    }
+
+    /////////////////////////////////
+    // PUT
+    // /////////////////////////////
+    function resetUser(id) {
+      return $http.put(url('/user', id), {
+        password: 'null',
+        active: 'No'
+      }).then(actionComplete)
+        .catch(catchErrorFn(actionErrMsg('resetUser', id)));
+    }
+
+    function updateRole(id, privilege) {
+      return $http.put(url('/user', id), {
+        privilege: privilege
+      }).then(actionComplete)
+        .catch(catchErrorFn(actionErrMsg('updateRole', id)));
+    }
+
+    function enableUser(id) {
+      return $http.put(url('/user', id), {
+        disabled: 'false'
+      }).then(actionComplete)
+        .catch(catchErrorFn(actionErrMsg('enableUser', id)));
+    }
+
+    /////////////////////////////////
+    // DELETE
+    // /////////////////////////////
+    function deleteUser(id) {
+      return $http.delete(url('/user', id))
+        .then(actionComplete)
+        .catch(catchErrorFn(actionErrMsg('deleteUser', id)));
+    }
+
+    function deleteAllDisabled() {
+      return $http.delete(url('/users'))
+        .then(actionComplete)
+        .catch(catchErrorFn('XHR deleteAllDisabled failed'));
+    }
+
+    /////////////////////////////////
+    // Helpers
+    // /////////////////////////////
+    function actionErrMsg(name, id) {
+      return 'XHR ' + name + ' by ' + id + ' failed';
+    }
+
+    function url(path, id) {
+      path = baseUrl + path;
+      if (id) path += '/' + id;
+      return path;
     }
   }
 })();

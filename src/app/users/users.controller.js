@@ -8,55 +8,97 @@
   /** @ngInject */
   function UsersController(
     UserData,
+    $log,
+    $document,
     UserDialog
   ) {
     var vm = this;
+    var users;
+    var disabledUsers;
     var searchField;
-    var showAdd;
+    var showAdd = UserDialog.showAdd;
 
     vm.switchUsers = switchUsers;
+    vm.showConfirm = UserDialog.showConfirm;
     vm.addOrDeleteAll = addOrDeleteAll;
+    vm.changeRole = changeRole;
+    vm.focusSearch = focusSearch;
     vm.roleClass = roleClass;
     vm.resetText = resetText;
-    vm.focusSearch = focusSearch;
 
     activate();
 
     function activate() {
       angular.element(document).ready(getSearchField);
       vm.showEnabled = true;
-      vm.statusFilter = enabledFilter;
-      vm.users = getUsers();
-      vm.showConfirm = UserDialog.initShowConfirm(vm.users);
-      showAdd = UserDialog.initAddDialog(vm.users);
+      return getUsers().then(successUsers);
       function getSearchField() {
         searchField = document.getElementById('user-search');
       }
     }
 
+    /////////////////////////////////
+    // GET users
+    // /////////////////////////////
+    function getUsers() {
+      return UserData.getUsers()
+        .then(assignUsers(users));
+    }
+
+    function assignUsers(users) {
+      return function(data) {
+        users = data;
+        vm.users = users;
+        return vm.users;
+      };
+    }
+
+    function successUsers() {
+      var type = vm.showEnabled ? ' ' : ' disabled ';
+      $log.info('Loaded' + type + 'users');
+    }
+
+    function getDisabledUsers() {
+      return UserData.getDisabledUsers()
+        .then(assignUsers(disabledUsers));
+    }
+
+    /////////////////////////////////
+    // ngClick functions
+    // /////////////////////////////
     function switchUsers() {
       vm.showEnabled = !vm.showEnabled;
-      vm.statusFilter = vm.showEnabled
-        ? enabledFilter
-        : disabledFilter;
-    }
-
-    function enabledFilter(user) {
-      return user.active || user.active === false;
-    }
-
-    function disabledFilter(user) {
-      return user.active === null;
+      return vm.showEnabled
+        ? getUsers().then(successUsers)
+        : getDisabledUsers().then(successUsers);
     }
 
     function addOrDeleteAll(ev) {
       if (vm.showEnabled) {
-        showAdd(ev);
+        showAdd(ev, vm.users);
       } else {
-        console.log('delete all');
+        vm.showConfirm(ev, 0, 'delAll', { name: '' }, vm.users);
       }
     }
 
+    function changeRole(user) {
+      var privilege = user.privilege == 'A' ? 'M' : 'A';
+      UserData.updateRole(user.id, privilege)
+        .then(function() {
+          user.privilege = privilege;
+        });
+    }
+
+    /////////////////////////////////
+    // DOM manipulation
+    // /////////////////////////////
+    function focusSearch() {
+      searchField.focus();
+    }
+
+    /////////////////////////////////
+    // Classes and Texts
+    // /////////////////////////////
     function roleClass(privilege) {
       return privilege == 'A'
         ? 'md-warn'
@@ -64,17 +106,9 @@
     }
 
     function resetText(user) {
-      if (user.active === null) return 'enable';
+      if (user.disabled) return 'enable';
       if (user.active) return 'reset';
       return 'inactive';
-    }
-
-    function focusSearch() {
-      searchField.focus();
-    }
-
-    function getUsers(options) {
-      return UserData.getAll(options);
     }
 
   }
