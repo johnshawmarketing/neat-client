@@ -36,12 +36,11 @@
     ) {
       var vm = this;
       var doc = $window.document;
+      var markers = [];
+      var records = [];
       var Gmap;
       var neatMap;
       var mapEl;
-
-      var markers = [];
-      var records = [];
 
       activate();
 
@@ -50,9 +49,6 @@
         MapInit.initialized
           .then(setupMap)
           .then(setupControls);
-        getTypes().then(function() {
-          $log.info('Loaded types');
-        });
       }
 
       /////////////////////////////////
@@ -65,22 +61,26 @@
           zoom: 15
         });
 
-        return getRecords().then(function(records) {
-          records.forEach(function(record) {
-            var local  = record.Location;
-            var marker = magicSteveMarkerr(
-              local.latitude,
-              local.longitude,
-              record
-            );
-          });
-          return records;
-        });
+        getTypes();
+
+        return getRecords().then(assignRecordsToMarkers);
       }
 
       /*
        * Map helpers
        */
+      function byId(id) {
+        return doc.getElementById(id);
+      }
+
+      function assignRecordsToMarkers(records) {
+        records.forEach(function(record) {
+          var local  = record.Location;
+          var marker =
+            magicSteveMarkerr(local.latitude, local.longitude, record);
+        });
+        return records;
+      }
       function magicSteveMarkerr(lat, lng, record, animate) {
         var options = {
           position: { lat: lat, lng: lng },
@@ -114,13 +114,14 @@
       function getTypes() {
         return MapData.getTypes()
           .then(function(data) {
-            vm.types = data.reduce(function(prev, curr) {
-              prev[curr.id] = curr.name.replace(' ', '-');
-              return prev;
-            }, {});
-            console.log(vm.types);
+            vm.types = data.reduce(typeArrayToMap, {});
             return vm.types;
           });
+
+        function typeArrayToMap(prev, curr) {
+          prev[curr.id] = curr.name.replace(' ', '-');
+          return prev;
+        }
       }
 
       function getRecords() {
@@ -151,12 +152,16 @@
       function AddDialogController($scope, $mdDialog) {
         $timeout(addPlaceSearch);
 
+        $scope.types = vm.types;
+        $scope.severity = 3;
+        $scope.cancel = cancel;
+        $scope.add = add;
+
         function addPlaceSearch() {
           var input = byId('address');
           var searchBox = new Gmap.places.SearchBox(input);
 
           neatMap.addListener('bounds_changed', function() {
-            // $log.log('bounds set');
             searchBox.setBounds(neatMap.getBounds());
           });
 
@@ -170,15 +175,11 @@
           });
         }
 
-        $scope.types = vm.types;
-
-        $scope.severity = 3;
-
-        $scope.cancel = function() {
+        function cancel() {
           $mdDialog.cancel();
-        };
+        }
 
-        $scope.add = function() {
+        function add() {
           MapData.createRecord({
             long: $scope.long,
             lat: $scope.lat,
@@ -190,15 +191,10 @@
           }).then(function(data) {
             var record = data.record;
             magicSteveMarkerr($scope.lat, $scope.long, record, true);
-            $log.log('added record:', record);
           });
           $mdDialog.hide();
-        };
+        }
       } // dialogCtrl
-
-      function byId(id) {
-        return doc.getElementById(id);
-      }
 
     } // controller
 
