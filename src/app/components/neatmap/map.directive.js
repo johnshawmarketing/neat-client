@@ -65,8 +65,9 @@
 
         geocoder = new Gmap.Geocoder;
 
-        getTypes();
-        return getRecords().then(assignRecordsToMarkers);
+        return getTypes()
+          .then(getRecords)
+          .then(assignRecordsToMarkers);
       }
 
       /*
