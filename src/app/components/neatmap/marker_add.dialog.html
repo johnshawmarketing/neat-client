@@ -9,13 +9,25 @@
       <h3 class="md-headline">Add Marker</h3>
       <form name="markerForm">
         <div layout="column">
-          <md-input-container md-no-float>
-            <input name="address"
-                   id="address"
-                   type="text"
-                   placeholder="Location"
-                   ng-model="address">
-          </md-input-container>
+          <div layout="row" layout-align="center center">
+            <md-input-container md-no-float flex="90">
+              <input name="address"
+                    id="address"
+                    type="text"
+                    placeholder="Location"
+                    md-select-on-focus
+                    ng-model="address">
+            </md-input-container>
+            <span flex="10">
+              <md-button class="md-icon-button md-primary"
+                         ng-click="locateCurrent()"
+                         aria-label="current location">
+                <i class="material-icons">
+                  my_location
+                </i>
+              </md-button>
+            </span>
+          </div>
           <md-input-container>
             <label>Type</label>
             <md-select ng-model="typeId">
@@ -33,7 +45,7 @@
               ng-model="description"
               md-maxlength="240"
               row="3"
-              md-select-on-focus></textarea>
+              ></textarea>
           </md-input-container>
           <h4 class="md-subhead">Severity</h4>
           <md-slider
