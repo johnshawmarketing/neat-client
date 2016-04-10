@@ -14,6 +14,7 @@
     UserDialog
   ) {
     var vm = this;
+    var doc = $document[0];
     var users;
     var disabledUsers;
     var searchField;
@@ -32,11 +33,11 @@
     activate();
 
     function activate() {
-      angular.element(document).ready(getSearchField);
+      angular.element(doc).ready(getSearchField);
       vm.showEnabled = true;
       return getUsers().then(successUsers);
       function getSearchField() {
-        searchField = document.getElementById('user-search');
+        searchField = doc.getElementById('user-search');
       }
     }
 

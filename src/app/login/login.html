@@ -28,7 +28,11 @@
         </md-input-container>
         <md-input-container>
           <label>Password</label>
-          <input type="password" name="password" required ng-model="lg.password">
+          <input type="password"
+                 name="password"
+                 ng-keypress="lg.enter($event)"
+                 required
+                 ng-model="lg.password">
           <div ng-messages="loginForm.password.$error">
             <div ng-message="required">Password required</div>
           </div>

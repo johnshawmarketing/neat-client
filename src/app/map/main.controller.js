@@ -3,10 +3,10 @@
 
   angular
     .module('neatClient')
-    .controller('MapController', MapController);
+    .controller('MainController', MainController);
 
   /** @ngInject */
-  function MapController($log) {
+  function MainController($log) {
     var vm = this;
 
     vm.random = Math.random();
@@ -14,7 +14,6 @@
     activate();
 
     function activate() {
-      $log.log('Map Controller loaded', vm.random);
     }
 
   }

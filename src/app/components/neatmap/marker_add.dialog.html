@@ -1,0 +1,67 @@
+<md-dialog aria-label="Add Marker"
+           flex="30"
+           flex-md="40"
+           flex-sm="55"
+           flex-xs="90"
+           layout-padding>
+  <md-dialog-content>
+    <div class="md-dialog-content">
+      <h3 class="md-headline">Add Marker</h3>
+      <form name="markerForm">
+        <div layout="column">
+          <div layout="row" layout-align="center center">
+            <md-input-container md-no-float flex="90">
+              <input name="address"
+                    id="address"
+                    type="text"
+                    placeholder="Location"
+                    ng-model="address">
+            </md-input-container>
+            <span flex="10">
+              <md-button class="md-icon-button md-primary"
+                         ng-click="locateCurrent()"
+                         aria-label="current location">
+                <i class="material-icons">
+                  my_location
+                </i>
+              </md-button>
+            </span>
+          </div>
+          <md-input-container>
+            <label>Type</label>
+            <md-select ng-model="typeId">
+              <md-option
+                ng-repeat="(key, type) in types"
+                value="{{key}}"
+                >
+                {{type}}
+              </md-option>
+            </md-select>
+          </md-input-container>
+          <md-input-container>
+            <label>Description</label>
+            <textarea
+              ng-model="description"
+              md-maxlength="240"
+              row="3"
+              ></textarea>
+          </md-input-container>
+          <h4 class="md-subhead">Severity</h4>
+          <md-slider
+              class="md-primary"
+              ng-model="severity"
+              step="1"
+              min="1"
+              max="5"
+              aria-label="severity"
+              md-discrete>
+          </md-slider>
+        </div>
+      </form>
+    </div>
+  </md-dialog-content>
+  <md-dialog-actions>
+    <md-button ng-click="cancel()" class="md-primary">Cancel</md-button>
+    <md-button ng-click="add()" class="md-primary">Save</md-button>
+  </md-dialog-actions>
+</md-dialog>

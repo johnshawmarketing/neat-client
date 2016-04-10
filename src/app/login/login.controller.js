@@ -14,11 +14,7 @@
     var vm = this;
 
     vm.login = login;
-
-    activate();
-
-    function activate() {
-    }
+    vm.enter = enter;
 
     // TODO: if form invalid, disable function
     function login() {
@@ -28,6 +24,11 @@
             $state.go('map');
           });
         });
+    }
+
+    function enter(ev) {
+      if (ev.charCode !== 13) return;
+      return login();
     }
 
   }
