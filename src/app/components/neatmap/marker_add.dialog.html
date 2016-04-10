@@ -1,0 +1,36 @@
+<md-dialog aria-label="Add Marker"
+           flex="30"
+           flex-md="40"
+           flex-sm="55"
+           flex-xs="90"
+           layout-padding>
+  <md-dialog-content>
+    <div class="md-dialog-content">
+      <h3>Add Marker</h3>
+      <form name="markerForm">
+        <div layout="column">
+          <md-input-container>
+            <label>Location</label>
+            <input name="address"
+                   ng-model="address">
+          </md-input-container>
+          <md-input-container>
+            <label>Type</label>
+            <md-select ng-model="chosenType">
+              <md-option
+                ng-repeat="type in types"
+                value="{{type.id}}"
+                >
+                {{type.name}}
+              </md-option>
+            </md-select>
+          </md-input-container>
+        </div>
+      </form>
+    </div>
+  </md-dialog-content>
+  <md-dialog-actions>
+    <md-button ng-click="cancel()" class="md-primary">Cancel</md-button>
+    <md-button ng-click="add()" class="md-primary">Save</md-button>
+  </md-dialog-actions>
+</md-dialog>

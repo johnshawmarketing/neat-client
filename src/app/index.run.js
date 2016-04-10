@@ -13,7 +13,9 @@
     AuthService
   ) {
 
-    $rootScope.$on('$stateChangeStart', function(e, toState) {
+    $rootScope.$on('$stateChangeStart', watchAuth);
+
+    function watchAuth(e, toState) {
       if (toState.name === 'login') {
         return;
       }
@@ -27,7 +29,7 @@
         e.preventDefault();
         $state.go('login');
       }
-    });
+    }
 
     $log.debug('runBlock end');
   }

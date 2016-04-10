@@ -9,8 +9,11 @@
   function UserDialog(
     $mdDialog,
     UserData,
+    $document,
     $mdToast
   ) {
+    var doc = $document[0];
+
     var service = {
       showConfirm: showConfirm,
       showAdd: showAdd
@@ -100,7 +103,7 @@
       $mdDialog.show({
         controller: AddDialogController,
         templateUrl: 'app/users/add.dialog.html',
-        parent: angular.element(document.body),
+        parent: angular.element(doc.body),
         targetEvent: ev,
         clickOutsideToClose: true
       });
