@@ -6,12 +6,14 @@
            layout-padding>
   <md-dialog-content>
     <div class="md-dialog-content">
-      <h3>Add Marker</h3>
+      <h3 class="md-headline">Add Marker</h3>
       <form name="markerForm">
         <div layout="column">
-          <md-input-container>
-            <label>Location</label>
+          <md-input-container md-no-float>
             <input name="address"
+                   id="address"
+                   type="text"
+                   placeholder="Location"
                    ng-model="address">
           </md-input-container>
           <md-input-container>
@@ -25,6 +27,24 @@
               </md-option>
             </md-select>
           </md-input-container>
+          <md-input-container>
+            <label>Description</label>
+            <textarea
+              ng-model="description"
+              md-maxlength="240"
+              row="3"
+              md-select-on-focus></textarea>
+          </md-input-container>
+          <h4 class="md-subhead">Severity</h4>
+          <md-slider
+              class="md-primary"
+              ng-model="severity"
+              step="1"
+              min="1"
+              max="5"
+              aria-label="severity"
+              md-discrete>
+          </md-slider>
         </div>
       </form>
     </div>
