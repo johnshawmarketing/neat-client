@@ -31,6 +31,7 @@
       $timeout,
       MapData,
       mapIcons,
+      $rootScope,
       MapInit
     ) {
       var vm = this;
@@ -38,6 +39,9 @@
       var Gmap;
       var neatMap;
       var mapEl;
+
+      var markers = [];
+      var records = [];
 
       activate();
 
@@ -56,29 +60,52 @@
       // /////////////////////////////
       function setupMap() {
         Gmap = $window.google.maps;
-        neatMap = getMap({
+        neatMap = new Gmap.Map(mapEl, {
           center: {lat: 44.4120908, lng: -79.6701331},
-          zoom: 14
+          zoom: 15
         });
 
-        var m1 = marker({
-          position: {lat: 44.406613, lng: -79.668722},
-          icon: mapIcons('garbage', 5, Gmap)
+        return getRecords().then(function(records) {
+          records.forEach(function(record) {
+            var local  = record.Location;
+            var marker = magicSteveMarkerr(
+              local.latitude,
+              local.longitude,
+              record
+            );
+          });
+          return records;
         });
-
-        return neatMap;
       }
 
       /*
        * Map helpers
        */
-      function getMap(config) {
-        return new Gmap.Map(mapEl, config);
+      function magicSteveMarkerr(lat, lng, record, animate) {
+        var options = {
+          position: { lat: lat, lng: lng },
+          icon: mapIcons(vm.types[record.TypeId], record.severity, Gmap),
+          map: neatMap,
+          myRecord: record
+        };
+
+        if (animate) {
+          options.animation = Gmap.Animation.DROP;
+        }
+
+        var marker = new Gmap.Marker(options);
+        attachMarkerEvent(marker);
+        records.push(record);
+        markers.push(marker);
+
+        return marker;
       }
 
-      function marker(options) {
-        options.map = neatMap;
-        return new Gmap.Marker(options);
+      function attachMarkerEvent(marker) {
+        marker.addListener('click', function(e) {
+          console.log('this my rec idx:', records.indexOf(this.myRecord));
+          console.log('this my idx:', markers.indexOf(this));
+        });
       }
 
       /////////////////////////////////
@@ -87,8 +114,20 @@
       function getTypes() {
         return MapData.getTypes()
           .then(function(data) {
-            vm.types = data;
+            vm.types = data.reduce(function(prev, curr) {
+              prev[curr.id] = curr.name.replace(' ', '-');
+              return prev;
+            }, {});
+            console.log(vm.types);
             return vm.types;
+          });
+      }
+
+      function getRecords() {
+        return MapData.getRecords()
+          .then(function(data) {
+            records = data;
+            return records;
           });
       }
 
@@ -99,7 +138,7 @@
         vm.showAdd = showAdd;
       }
 
-      function showAdd(ev, markers) {
+      function showAdd(ev) {
         $mdDialog.show({
           controller: AddDialogController,
           templateUrl: 'app/components/neatmap/marker_add.dialog.html',
@@ -125,8 +164,7 @@
             var places = searchBox.getPlaces();
             if (places.length === 0) return;
             var place = places[0];
-            $scope.name = place.name;
-            $scope.address = place.formatted_address;
+            $scope.address = place.name;
             $scope.long = place.geometry.location.lng();
             $scope.lat = place.geometry.location.lat();
           });
@@ -141,13 +179,19 @@
         };
 
         $scope.add = function() {
-          $log.log('name:', $scope.name);
-          $log.log('address:', $scope.address);
-          $log.log('long:', $scope.long);
-          $log.log('lat:', $scope.lat);
-          $log.log('chosenType:', $scope.chosenType);
-          $log.log('description:', $scope.description);
-          $log.log('severity:', $scope.severity);
+          MapData.createRecord({
+            long: $scope.long,
+            lat: $scope.lat,
+            address: $scope.address,
+            description: $scope.description,
+            severity: $scope.severity,
+            user_id: $rootScope.user.id,
+            type_id: $scope.typeId
+          }).then(function(data) {
+            var record = data.record;
+            magicSteveMarkerr($scope.lat, $scope.long, record, true);
+            $log.log('added record:', record);
+          });
           $mdDialog.hide();
         };
       } // dialogCtrl

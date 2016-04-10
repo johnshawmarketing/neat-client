@@ -11,7 +11,9 @@
     type = type.toLowerCase();
     var levels = {
       1: '-green',
+      2: '-yellow',
       3: '-yellow',
+      4: '-red',
       5: '-red'
     };
     var url = '../assets/images/' + type + levels[level] + '.svg';

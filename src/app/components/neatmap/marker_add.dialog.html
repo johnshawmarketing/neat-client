@@ -18,12 +18,12 @@
           </md-input-container>
           <md-input-container>
             <label>Type</label>
-            <md-select ng-model="chosenType">
+            <md-select ng-model="typeId">
               <md-option
-                ng-repeat="type in types"
-                value="{{type.id}}"
+                ng-repeat="(key, type) in types"
+                value="{{key}}"
                 >
-                {{type.name}}
+                {{type}}
               </md-option>
             </md-select>
           </md-input-container>

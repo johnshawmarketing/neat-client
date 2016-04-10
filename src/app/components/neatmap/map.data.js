@@ -15,6 +15,8 @@
 
     var service = {
       getTypes: getTypes,
+      getRecords: getRecords,
+      createRecord: createRecord
     };
 
     return service;
@@ -26,6 +28,12 @@
       return $http.get(url('/types'))
         .then(getDataComplete('types'))
         .catch(catchErrorFn('XHR getTypes failed'));
+    }
+
+    function getRecords() {
+      return $http.get(url('/records'))
+        .then(getDataComplete('records'))
+        .catch(catchErrorFn('XHR getRecords failed'));
     }
 
     /////////////////////////////////
@@ -59,6 +67,11 @@
     /////////////////////////////////
     // POST
     // /////////////////////////////
+    function createRecord(record) {
+      return $http.post(url('/records'), record)
+        .then(actionComplete)
+        .catch(catchErrorFn('XHR createRecord failed'));
+    }
 
     /////////////////////////////////
     // PUT
