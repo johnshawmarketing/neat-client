@@ -78,16 +78,16 @@
       }
 
       var confirm = $mdDialog.confirm()
-      .title(confirmTitle())
-      .textContent(dialog[type].content)
-      .ariaLabel(dialog[type].ariaLabel)
-      .targetEvent(ev)
-      .ok(dialog[type].ok)
-      .cancel('Cancel');
+        .title(confirmTitle())
+        .textContent(dialog[type].content)
+        .ariaLabel(dialog[type].ariaLabel)
+        .targetEvent(ev)
+        .ok(dialog[type].ok)
+        .cancel('Cancel');
 
       $mdDialog
-      .show(confirm)
-      .then(dialog[type].confirmAction);
+        .show(confirm)
+        .then(dialog[type].confirmAction);
     } // showConfirm
 
     function confirmToast(message) {

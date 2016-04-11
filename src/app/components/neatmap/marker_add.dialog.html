@@ -17,7 +17,10 @@
                     placeholder="Location"
                     ng-model="address">
             </md-input-container>
-            <span flex="10">
+            <span ng-if="locating" flex="10">
+              <md-progress-circular md-diameter="20"></md-progress-circular>
+            </span>
+            <span ng-if="!locating" flex="10">
               <md-button class="md-icon-button md-primary"
                          ng-click="locateCurrent()"
                          aria-label="current location">

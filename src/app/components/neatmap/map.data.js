@@ -16,7 +16,8 @@
     var service = {
       getTypes: getTypes,
       getRecords: getRecords,
-      createRecord: createRecord
+      createRecord: createRecord,
+      deleteRecord: deleteRecord,
     };
 
     return service;
@@ -80,6 +81,11 @@
     /////////////////////////////////
     // DELETE
     // /////////////////////////////
+    function deleteRecord(id) {
+      return $http.delete(url('/record', id))
+        .then(actionComplete)
+        .catch(catchErrorFn(actionErrMsg('deleteRecord', id)));
+    }
 
     /////////////////////////////////
     // Helpers

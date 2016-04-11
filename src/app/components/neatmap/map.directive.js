@@ -43,6 +43,8 @@
       var neatMap;
       var mapEl;
       var geocoder;
+      var selectedRecordIdx;
+      var selectedMarkerIdx;
 
       activate();
 
@@ -85,6 +87,8 @@
         });
         return records;
       }
+
+      // adds record / marker to their respective arrays
       function magicSteveMarkerr(lat, lng, record, animate) {
         var options = {
           position: { lat: lat, lng: lng },
@@ -107,9 +111,41 @@
 
       function attachMarkerEvent(marker) {
         marker.addListener('click', function(e) {
-          console.log('this my rec idx:', records.indexOf(this.myRecord));
-          console.log('this my idx:', markers.indexOf(this));
+          var self = this;
+          selectedRecordIdx = records.indexOf(self.myRecord);
+          selectedMarkerIdx = markers.indexOf(self);
+          var infowindow = new Gmap.InfoWindow({
+            content: createInfoContent(records[selectedRecordIdx])
+          });
+          infowindow.addListener('domready', function() {
+            var editBtn = byId('edit-record-btn');
+            var delBtn = byId('del-record-btn');
+            editBtn.addEventListener('click', function() {
+              vm.showAdd();
+            });
+            delBtn.addEventListener('click', function(ev) {
+              confirmDelete(ev, 'address', self);
+            });
+          });
+          infowindow.addListener('closeclick', function() {
+            selectedRecordIdx = selectedMarkerIdx = null;
+          });
+          infowindow.open(neatMap, self);
         });
+      }
+
+      function createInfoContent(record) {
+        var address = '<h4>' + record.Location.address + '</h4>';
+        var severity = '<p>Severity: ' + record.severity + '</p>';
+        var description = '<p>' + record.description + '</p>';
+        var divider = '<md-divider></md-divider>';
+        var editBtn = '<button class="md-primary md-button" type="button"' +
+          ' aria-label="Edit" id="edit-record-btn">Edit</button>';
+        var delBtn = '<button class="md-primary md-button" type="button"' +
+          ' aria-label="Delete" id="del-record-btn">Delete</button>';
+        var content = address + severity + description +
+                      divider + editBtn + delBtn;
+        return content;
       }
 
       /////////////////////////////////
@@ -141,6 +177,28 @@
       // /////////////////////////////
       function setupControls() {
         vm.showAdd = showAdd;
+      }
+
+      function confirmDelete(ev, address, marker) {
+        var confirm = $mdDialog.confirm()
+          .title('Confirm to delete ' + address)
+          .textContent('Inreversible. Are you sure?')
+          .ariaLabel('Confirm delete')
+          .targetEvent(ev)
+          .ok('Delete')
+          .cancel('Cancel');
+
+        $mdDialog
+          .show(confirm)
+          .then(function() {
+            MapData.deleteRecord(marker.myRecord.id).then(function(data) {
+              records.splice(selectedRecordIdx, 1);
+              marker.setMap(null);
+              markers.splice(selectedMarkerIdx, 1);
+              selectedRecordIdx = selectedMarkerIdx = null;
+              $log.info(data);
+            });
+          });
       }
 
       function showAdd(ev) {
@@ -196,6 +254,7 @@
             type_id: ad.typeId
           }).then(function(data) {
             var record = data.record;
+            record.Location = { address: ad.address };
             magicSteveMarkerr(ad.lat, ad.long, record, true);
           });
           $mdDialog.hide();
@@ -203,6 +262,7 @@
 
         function locateCurrent() {
           ad.address = 'Locating...';
+          ad.locating = true;
           if (nav.geolocation) {
             nav.geolocation.getCurrentPosition(function(pos) {
               ad.lat = pos.coords.latitude;
@@ -210,6 +270,7 @@
               geocoder.geocode({
                 location: { lat: ad.lat, lng: ad.long }
               }, function(results, status) {
+                ad.locating = false;
                 if (status === Gmap.GeocoderStatus.OK) {
                   if (results[1]) {
                     ad.address = results[1].formatted_address;
