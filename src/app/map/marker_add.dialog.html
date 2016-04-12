@@ -18,7 +18,8 @@
                     ng-model="address">
             </md-input-container>
             <span ng-if="locating" flex="10">
-              <md-progress-circular md-diameter="20"></md-progress-circular>
+              <md-progress-circular md-mode='indeterminate' md-diameter="20">
+              </md-progress-circular>
             </span>
             <span ng-if="!locating" flex="10">
               <md-button class="md-icon-button md-primary"
