@@ -18,7 +18,7 @@
       getRecords: getRecords,
       createRecord: createRecord,
       updateRecord: updateRecord,
-      deleteRecord: deleteRecord,
+      deleteRecord: deleteRecord
     };
 
     return service;

@@ -78,7 +78,7 @@
     }
 
     function attachMarkerEvent(marker) {
-      marker.addListener('click', function(e) {
+      marker.addListener('click', function() {
         var self = this;
 
         // on click create a new info window with record content
