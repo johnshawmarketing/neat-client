@@ -81,10 +81,12 @@
       marker.addListener('click', function(e) {
         var self = this;
 
+        // on click create a new info window with record content
         var infowindow = new Gmap.InfoWindow({
           content: MapDialog.createInfoContent(self.myRecord)
         });
 
+        // add click listener to info window buttons
         infowindow.addListener('domready', function() {
           var editBtn = byId('edit-record-btn');
           var delBtn = byId('del-record-btn');

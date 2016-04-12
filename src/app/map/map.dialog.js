@@ -51,7 +51,7 @@
       return function showAdd(ev) {
         $mdDialog.show({
           controller: AddDialogController,
-          templateUrl: 'app/map/marker_add.dialog.html',
+          templateUrl: 'app/map/marker.dialog.html',
           parent: angular.element($document[0].body),
           targetEvent: ev,
           clickOutsideToClose: true
