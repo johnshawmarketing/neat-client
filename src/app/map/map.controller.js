@@ -17,7 +17,7 @@
   ) {
     var vm = this;
     var markers = [];
-    var records = [];
+    // var records = [];
     var Gmap;
     var neatMap;
     var mapEl;
@@ -71,7 +71,7 @@
 
       var marker = new Gmap.Marker(options);
       attachMarkerEvent(marker);
-      records.push(record);
+      // records.push(record);
       markers.push(marker);
 
       return marker;
@@ -91,12 +91,12 @@
           var editBtn = byId('edit-record-btn');
           var delBtn = byId('del-record-btn');
 
-          editBtn.addEventListener('click', function() {
-            console.log('trying to edit');
+          editBtn.addEventListener('click', function(ev) {
+            vm.showDialog(ev, self, infowindow);
           });
 
           delBtn.addEventListener('click', function(ev) {
-            MapDialog.confirmDelete(ev, self, markers, records);
+            MapDialog.confirmDelete(ev, self, markers);
           });
         });
 
@@ -122,17 +122,17 @@
 
     function getRecords() {
       return MapData.getRecords()
-      .then(function(data) {
-        records = data;
-        return records;
-      });
+        .then(function(data) {
+          // records = data;
+          return data;
+        });
     }
 
     /////////////////////////////////
     // Dialog setup
     // /////////////////////////////
     function setupControls() {
-      vm.showAdd = MapDialog.initShowAdd(
+      vm.showDialog = MapDialog.initMarkerDialog(
         vm.types,
         Gmap,
         neatMap,

@@ -17,6 +17,7 @@
       getTypes: getTypes,
       getRecords: getRecords,
       createRecord: createRecord,
+      updateRecord: updateRecord,
       deleteRecord: deleteRecord,
     };
 
@@ -77,6 +78,11 @@
     /////////////////////////////////
     // PUT
     // /////////////////////////////
+    function updateRecord(id, record) {
+      return $http.put(url('/record', id), record)
+        .then(actionComplete)
+        .catch(catchErrorFn(actionErrMsg('updateRecord', id)));
+    }
 
     /////////////////////////////////
     // DELETE
