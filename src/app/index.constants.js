@@ -5,6 +5,7 @@
     .module('neatClient')
     .constant('ApiKey', 'AIzaSyC_I1rGTiTnBiYQmCFou6xYWzC1rR3QetM')
     .constant('mapIcons', mapIcons)
+    .constant('byId', byId)
     .constant('url', url);
 
   function mapIcons(type, level, Gmap) {
@@ -21,6 +22,10 @@
       url: url,
       anchor: new Gmap.Point(28, 28)
     };
+  }
+
+  function byId(id) {
+    return document.getElementById(id);
   }
 
   function url(path, id) {
