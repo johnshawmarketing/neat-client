@@ -23,9 +23,9 @@
         views: {
           nav: navView,
           content: {
-            templateUrl: 'app/map/main.html',
-            controller: 'MainController',
-            controllerAs: 'mn'
+            templateUrl: 'app/map/map.html',
+            controller: 'MapController',
+            controllerAs: 'mp'
           }
         }
       })
