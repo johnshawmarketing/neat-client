@@ -162,6 +162,7 @@
             vm.locating = true;
             if (nav.geolocation) {
               nav.geolocation.getCurrentPosition(function(pos) {
+                  $log.log(pos);
                 vm.lat = pos.coords.latitude;
                 vm.long = pos.coords.longitude;
                 var geocoder = new Gmap.Geocoder;
@@ -170,8 +171,8 @@
                 }, function(results, status) {
                   vm.locating = false;
                   if (status === Gmap.GeocoderStatus.OK) {
-                    if (results[1]) {
-                      vm.address = results[1].formatted_address;
+                    if (results[0]) {
+                      vm.address = results[0].formatted_address;
                       vm.$apply();
                     } else {
                       $window.alert('No results found');

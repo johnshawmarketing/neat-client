@@ -16,6 +16,7 @@
     var service = {
       getTypes: getTypes,
       getRecords: getRecords,
+      getFilteredRecords: getFilteredRecords,
       createRecord: createRecord,
       updateRecord: updateRecord,
       deleteRecord: deleteRecord
@@ -36,6 +37,24 @@
       return $http.get(url('/records'))
         .then(getDataComplete('records'))
         .catch(catchErrorFn('XHR getRecords failed'));
+    }
+
+    function getFilteredRecords(chosenTypes, severity) {
+      var queryStr = '?';
+
+      if (chosenTypes.length > 0) {
+        chosenTypes = chosenTypes.join();
+        queryStr += 'ftypes=' + chosenTypes;
+        queryStr += severity > 0 ? '&' : '';
+      }
+
+      if (severity > 0) {
+        queryStr += 'fseverity=' + severity;
+      }
+
+      return $http.get(url('/records' + queryStr))
+        .then(getDataComplete('records'))
+        .catch(catchErrorFn('XHR getFilteredRecords failed'));
     }
 
     /////////////////////////////////

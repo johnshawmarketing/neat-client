@@ -1,3 +1,59 @@
+<md-sidenav
+  class="md-sidenav-left"
+  md-component-id="left"
+  md-whiteframe="4">
+  <md-toolbar>
+    <h1 class="md-toolbar-tools">
+      <i class="material-icons mi--mid" style="margin-right:10px">
+        blur_circular
+      </i>
+      Filter Records
+    </h1>
+  </md-toolbar>
+  <div layout="column" layout-padding layout-margin>
+    <h4 class="md-subhead">Type</h4>
+    <div layout="row" layout-wrap>
+      <md-checkbox
+        class="md-primary"
+        flex="45"
+        ng-repeat="type in mp.filterTypes"
+        ng-model="type.checked"
+        aria-label="{{type.name}} checkbox">
+        {{type.name}}
+      </md-checkbox>
+    </div>
+    <md-checkbox
+      class="md-primary"
+      style="margin-left:16px"
+      ng-model="mp.applySeverity"
+      aria-label="Apply severity filter checkbox">
+      Severity: {{mp.applySeverity ? mp.filterSeverity : 'n/a'}}
+    </md-checkbox>
+    <md-slider
+        class="md-primary"
+        ng-model="mp.filterSeverity"
+        step="1"
+        min="1"
+        max="5"
+        aria-label="severity filter slider"
+        md-discrete>
+    </md-slider>
+    <div layout="row" layout-wrap>
+      <md-button class="md-primary" ng-click="mp.filterClearAll()">
+        Clear All
+      </md-button>
+      <md-button class="md-raised md-primary" ng-click="mp.filterUpdate()">
+        Update
+      </md-button>
+      <md-button ng-click="mp.toggleSideMenu()">Cancel</md-button>
+    </div>
+  </div>
+</md-sidenav>
+<md-button class="md-fab md-fab--lg md-fab--search pos-fixed"
+           ng-click="mp.toggleSideMenu()"
+           aria-label="Filter markers">
+  <i class="material-icons mi--mid">assignment</i>
+</md-button>
 <md-button class="md-fab md-primary md-fab--lg md-fab--add pos-fixed"
            ng-click="mp.showDialog($event)"
            aria-label="Add user">
