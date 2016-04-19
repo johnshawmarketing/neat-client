@@ -13,14 +13,20 @@
     mapIcons,
     MapInit,
     $mdDialog,
+    $mdSidenav,
+    $scope,
     $window
   ) {
     var vm = this;
     var markers = [];
-    // var records = [];
     var Gmap;
     var neatMap;
     var mapEl;
+    var clearing = false; // for filterSeverity watch
+
+    vm.toggleSideMenu = toggleSideMenu;
+    vm.filterUpdate = filterUpdate;
+    vm.filterClearAll = filterClearAll;
 
     activate();
 
@@ -71,14 +77,21 @@
 
       var marker = new Gmap.Marker(options);
       attachMarkerEvent(marker);
-      // records.push(record);
       markers.push(marker);
 
       return marker;
     }
 
+    function clearMarkers() {
+      markers.forEach(function loopMarkers(marker) {
+        marker.setMap(null);
+      });
+
+      markers = [];
+    }
+
     function attachMarkerEvent(marker) {
-      marker.addListener('click', function(e) {
+      marker.addListener('click', function() {
         var self = this;
 
         // on click create a new info window with record content
@@ -111,19 +124,24 @@
       return MapData.getTypes()
       .then(function(data) {
         vm.types = data.reduce(typeArrayToMap, {});
+        vm.filterTypes = data.map(typeArrayToFilterModel);
         return vm.types;
       });
 
       function typeArrayToMap(prev, curr) {
-        prev[curr.id] = curr.name.replace(' ', '-');
+        prev[curr.id] = curr.name;
         return prev;
+      }
+
+      function typeArrayToFilterModel(type) {
+        type.checked = false;
+        return type;
       }
     }
 
     function getRecords() {
       return MapData.getRecords()
         .then(function(data) {
-          // records = data;
           return data;
         });
     }
@@ -138,6 +156,59 @@
         neatMap,
         magicMarker
       );
+
+      $scope.$watch('mp.filterSeverity', function(now) {
+        if (now && !clearing) {
+          vm.applySeverity = true;
+        }
+        clearing = false;
+      });
+    }
+
+    /////////////////////////////////
+    // Filter Menu
+    // /////////////////////////////
+    function toggleSideMenu() {
+      return $mdSidenav('left').toggle();
+    }
+
+    function filterUpdate() {
+      var chosenTypes = vm.filterTypes.reduce(toTypeIdArray, []);
+      // reset markers before update
+      clearMarkers();
+      // if nothing is chosen, do nothing
+      if (chosenTypes.length === 0 && !vm.applySeverity) {
+        return getRecords()
+          .then(assignRecordsToMarkers);
+      }
+      // selecting all types is the same as selecting none: return all
+      if (chosenTypes.length === vm.filterTypes.length) {
+        chosenTypes = [];
+      }
+      // severity 0 to prevent applying severity filter for MapData service
+      var fSeverity = vm.applySeverity ? vm.filterSeverity : 0;
+
+      return MapData.getFilteredRecords(chosenTypes, fSeverity)
+        .then(assignRecordsToMarkers);
+
+      function toTypeIdArray(types, curr) {
+        if (curr.checked) {
+          types.push(curr.id);
+        }
+        return types;
+      }
+    }
+
+    function filterClearAll() {
+      clearing = true;
+      vm.filterTypes.forEach(clearAllTypes);
+      vm.filterSeverity = 1;
+      vm.applySeverity = false;
+
+      function clearAllTypes(type) {
+        type.checked = false;
+      }
+      return;
     }
 
   }
