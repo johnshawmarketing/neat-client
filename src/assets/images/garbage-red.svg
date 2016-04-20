@@ -1,15 +1,1 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<svg width="52px" height="52px" viewBox="0 0 52 52" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <!-- Generator: Sketch 3.6.1 (26313) - http://www.bohemiancoding.com/sketch -->
-    <title>garbage-red</title>
-    <desc>Created with Sketch.</desc>
-    <defs></defs>
-    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <g id="map-icons" transform="translate(-277.000000, -175.000000)">
-            <g id="garbage-red" transform="translate(283.000000, 181.000000)">
-                <circle id="path-1" stroke-opacity="0.61" stroke="#D32F2F" stroke-width="12" fill="#D32F2F" cx="20" cy="20" r="20"></circle>
-                <path d="M13.3067689,30.2964115 C13.4134875,31.2372775 14.2839607,32 15.2500967,32 L25.7499033,32 C26.716455,32 27.5864841,31.237528 27.6932311,30.2964115 L29.25,16.5714286 L11.75,16.5714286 L13.3067689,30.2964115 L13.3067689,30.2964115 L13.3067689,30.2964115 Z M15.25,11.4285714 L16.5625,8 L24.4375,8 L25.75,11.4285714 L29.25,11.4285714 C31,11.4285714 31,14.8571429 31,14.8571429 L20.5,14.8571429 L10,14.8571429 C10,14.8571429 10,11.4285714 11.75,11.4285714 L15.25,11.4285714 L15.25,11.4285714 L15.25,11.4285714 Z M17,11.4285714 L24,11.4285714 L23.125,9.71428571 L17.875,9.71428571 L17,11.4285714 L17,11.4285714 L17,11.4285714 Z" id="Shape" fill="#FFFFFF"></path>
-            </g>
-        </g>
-    </g>
-</svg>
+<svg width="52" height="52" viewBox="0 0 52 52" xmlns="http://www.w3.org/2000/svg"><title>garbage-red</title><g transform="translate(6 6)" fill="none" fill-rule="evenodd"><circle stroke-opacity=".61" stroke="#D32F2F" stroke-width="12" fill="#D32F2F" cx="20" cy="20" r="20"/><path d="M13.307 30.296c.106.941.977 1.704 1.943 1.704h10.5c.966 0 1.836-.762 1.943-1.704l1.557-13.725h-17.5l1.557 13.725zM15.25 11.43L16.563 8h7.875l1.312 3.429h3.5c1.75 0 1.75 3.428 1.75 3.428H10s0-3.428 1.75-3.428h3.5zm1.75 0h7l-.875-1.715h-5.25L17 11.43z" fill="#FFF"/></g></svg>
