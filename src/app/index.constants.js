@@ -17,7 +17,12 @@
       4: '-red',
       5: '-red'
     };
-    var url = '../assets/images/' + type.replace(' ', '-') + levels[level] + '.svg';
+    var url = '../assets/images/';
+    if (type == 'placeholder') {
+      url += type + '.svg';
+    } else {
+      url += type.replace(' ', '-') + levels[level] + '.svg';
+    }
     return {
       url: url,
       anchor: new Gmap.Point(28, 28)
