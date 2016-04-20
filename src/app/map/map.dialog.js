@@ -9,6 +9,7 @@
   function MapDialog(
     byId,
     MapData,
+    MapInit,
     mapIcons,
     $document,
     $log,
@@ -170,25 +171,16 @@
             vm.locating = true;
             if (nav.geolocation) {
               nav.geolocation.getCurrentPosition(function(pos) {
-                  $log.log(pos);
                 vm.lat = pos.coords.latitude;
                 vm.long = pos.coords.longitude;
-                var geocoder = new Gmap.Geocoder;
-                geocoder.geocode({
-                  location: { lat: vm.lat, lng: vm.long }
-                }, function(results, status) {
+                MapInit.geocoder(Gmap, {
+                  lat: vm.lat, lng: vm.long
+                }, autoFillAddress);
+                function autoFillAddress(result) {
                   vm.locating = false;
-                  if (status === Gmap.GeocoderStatus.OK) {
-                    if (results[0]) {
-                      vm.address = results[0].formatted_address;
-                      vm.$apply();
-                    } else {
-                      $window.alert('No results found');
-                    }
-                  } else {
-                    $window.alert('Geocoder failed due to: ' + status);
-                  }
-                });
+                  vm.address = result.formatted_address;
+                  vm.$apply();
+                }
               });
             } else {
               $log.error('Browser does not support goelocation');

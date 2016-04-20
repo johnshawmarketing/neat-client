@@ -47,46 +47,43 @@
         zoom: 15
       });
 
-      neatMap.addListener('click', function(ev) {
-        console.log(ev);
-        var geocoder = new Gmap.Geocoder;
-        geocoder.geocode({
-          location: ev.latLng
-        }, function(results, status) {
-          var result = results[0];
-          if (status === Gmap.GeocoderStatus.OK) {
-            if (result) {
-              var lat = ev.latLng.lat();
-              var lng = ev.latLng.lng();
-              var record = {
-                Location: {
-                  address: result.formatted_address,
-                  latitude: lat,
-                  longitude: lng
-                },
-                severity: 3
-              };
-              var marker = magicMarker(lat, lng, record, true, true);
-              setTimeout(function() {
-                MapDialog.confirmDelete(ev, marker, markers);
-              }, 2000);
-            } else {
-              $window.alert('No results found');
-            }
-          } else {
-            $window.alert('Geocoder failed due to: ' + status);
-          }
-        });
-      });
+      clickMapToAddListener();
 
       return getTypes()
         .then(getRecords)
         .then(assignRecordsToMarkers);
     }
 
+    function clickMapToAddListener() {
+      neatMap.addListener('click', onClickAddMarker);
+
+      function onClickAddMarker(ev) {
+        MapInit.geocoder(Gmap, ev.latLng, addPlaceholder);
+      }
+    } // clickMapToAddListener
+
     /*
      * Map helpers
      */
+    function addPlaceholder(result) {
+      var resetTime = 180000; // 3 min
+      var geo = result.geometry.location;
+      var lat = geo.lat();
+      var lng = geo.lng();
+      var record = {
+        Location: {
+          address: result.formatted_address,
+          latitude: lat,
+          longitude: lng
+        },
+        severity: 3
+      };
+      var marker = magicMarker(lat, lng, record, true, true);
+      setTimeout(function clearMarkerIfTooLong() {
+        MapDialog.confirmDelete(ev, marker, markers);
+      }, resetTime);
+    }
+
     function assignRecordsToMarkers(records) {
       records.forEach(function(record) {
         var local  = record.Location;
