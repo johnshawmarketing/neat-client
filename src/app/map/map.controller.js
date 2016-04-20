@@ -80,7 +80,7 @@
       };
       var marker = magicMarker(lat, lng, record, true, true);
       setTimeout(function clearMarkerIfTooLong() {
-        MapDialog.confirmDelete(ev, marker, markers);
+        MapDialog.confirmDelete(0, marker, markers);
       }, resetTime);
     }
 

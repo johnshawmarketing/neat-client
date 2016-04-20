@@ -194,6 +194,10 @@
 
     function confirmDelete(ev, marker, markers) {
       var record = marker.myRecord;
+      if (!record.TypeId) {
+        return deleteUIcleanUp();
+      }
+
       var address = record.Location.address;
       var text =
         'Inreversible. Are you sure you want to delete: ' + address + '?';
@@ -204,10 +208,6 @@
         .targetEvent(ev)
         .ok('Delete')
         .cancel('Cancel');
-
-      if (!record.TypeId) {
-        return deleteUIcleanUp();
-      }
 
       $mdDialog
         .show(confirm)
