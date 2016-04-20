@@ -28,8 +28,26 @@
     asyncLoad(asyncUrl, 'GMapInitialized');
 
     var service = {
-      initialized: mapsDefer.promise
+      initialized: mapsDefer.promise,
+      geocoder: geocoder
     };
+
+    function geocoder(Gmap, latLng, onceLocated) {
+      var gc = new Gmap.Geocoder;
+      gc.geocode({ location: latLng }, geocodeCb);
+
+      function geocodeCb(results, status) {
+        if (status === Gmap.GeocoderStatus.OK) {
+          if (results[0]) {
+            onceLocated(results[0]);
+          } else {
+            $window.alert('No results found');
+          }
+        } else {
+          $window.alert('Geocoder failed due to: ' + status);
+        }
+      }
+    }
 
     return service;
 

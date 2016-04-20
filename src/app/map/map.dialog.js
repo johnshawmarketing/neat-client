@@ -9,6 +9,7 @@
   function MapDialog(
     byId,
     MapData,
+    MapInit,
     mapIcons,
     $document,
     $log,
@@ -31,7 +32,7 @@
     function createInfoContent(record) {
       var address = '<h4>' + record.Location.address + '</h4>';
       var severity = '<p>Severity: ' + record.severity + '</p>';
-      var description = '<p>' + record.description + '</p>';
+      var description = '<p>' + (record.description || 'n/a') + '</p>';
       var divider = '<md-divider></md-divider>';
       var editBtn = '<button class="md-primary md-button" type="button"' +
         ' aria-label="Edit" id="edit-record-btn">Edit</button>';
@@ -49,7 +50,7 @@
       magicMarker
     ) {
 
-      return function showDialog(ev, marker, infowindow) {
+      return function showDialog(ev, marker, infowindow, markers) {
         $mdDialog.show({
           controller: DialogController,
           templateUrl: 'app/map/marker.dialog.html',
@@ -62,6 +63,7 @@
           var vm = $scope;
           var record;
           var isUpdate = marker ? true : false;
+          var isMapAdd;
           $timeout(addPlaceSearch);
 
           vm.types = types;
@@ -69,6 +71,7 @@
           vm.cancel = cancel;
           vm.confirm = confirm;
           vm.locateCurrent = locateCurrent;
+
           if (isUpdate) {
             record = marker.myRecord;
             vm.lat = record.Location.latitude;
@@ -77,6 +80,8 @@
             vm.description = record.description;
             vm.severity = record.severity;
             vm.typeId = record.TypeId;
+            // for adding directly on the map without clicking add button
+            isMapAdd = !record.TypeId;
           }
 
           function addPlaceSearch() {
@@ -112,7 +117,7 @@
               type_id: vm.typeId
             };
 
-            if (isUpdate) {
+            if (isUpdate && !isMapAdd) {
               update(recordVals);
             } else {
               add(recordVals);
@@ -123,6 +128,10 @@
           function add(recordVals) {
             MapData.createRecord(recordVals)
               .then(function(data) {
+                if (isMapAdd) {
+                  infowindow.close();
+                  confirmDelete(ev, marker, markers);
+                }
                 var newRecord = data.record;
                 newRecord.Location = {
                   address: vm.address,
@@ -162,25 +171,16 @@
             vm.locating = true;
             if (nav.geolocation) {
               nav.geolocation.getCurrentPosition(function(pos) {
-                  $log.log(pos);
                 vm.lat = pos.coords.latitude;
                 vm.long = pos.coords.longitude;
-                var geocoder = new Gmap.Geocoder;
-                geocoder.geocode({
-                  location: { lat: vm.lat, lng: vm.long }
-                }, function(results, status) {
+                MapInit.geocoder(Gmap, {
+                  lat: vm.lat, lng: vm.long
+                }, autoFillAddress);
+                function autoFillAddress(result) {
                   vm.locating = false;
-                  if (status === Gmap.GeocoderStatus.OK) {
-                    if (results[0]) {
-                      vm.address = results[0].formatted_address;
-                      vm.$apply();
-                    } else {
-                      $window.alert('No results found');
-                    }
-                  } else {
-                    $window.alert('Geocoder failed due to: ' + status);
-                  }
-                });
+                  vm.address = result.formatted_address;
+                  vm.$apply();
+                }
               });
             } else {
               $log.error('Browser does not support goelocation');
@@ -205,9 +205,13 @@
         .ok('Delete')
         .cancel('Cancel');
 
+      if (!record.TypeId) {
+        return deleteUIcleanUp();
+      }
+
       $mdDialog
-      .show(confirm)
-      .then(performDelete);
+        .show(confirm)
+        .then(performDelete);
 
       function performDelete() {
         MapData.deleteRecord(marker.myRecord.id)
@@ -216,8 +220,13 @@
 
       function deleteUIcleanUp(data) {
         marker.setMap(null);
-        markers.splice(markers.indexOf(marker), 1);
-        $log.info(data);
+        var idx = markers.indexOf(marker);
+        if (idx > -1) {
+          markers.splice(idx, 1);
+        }
+        if (data) {
+          $log.info(data);
+        }
       }
     } // confirmDelete
 
