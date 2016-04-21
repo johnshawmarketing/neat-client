@@ -15,6 +15,21 @@
        md-ink-ripple>Users</a>
   </nav>
   <span flex="20" layout="row" layout-align="center center">
-    <md-button class="btn-logout" ng-click="nv.logout()">Logout</md-button>
+    <md-menu>
+      <md-button  ng-click="$mdOpenMenu($event)">
+        <i class="material-icons mi--mid">account_circle</i>
+        {{me.name.split(' ')[0]}}
+      </md-button>
+      <md-menu-content>
+        <md-menu-item>
+          <p>{{me.name}}</p>
+        </md-menu-item>
+        <md-menu-item>
+          <md-button class="md-primary" ng-click="nv.logout()">
+            Logout
+          </md-button>
+        </md-menu-item>
+      </md-menu-content>
+    </md-menu>
   </span>
 </md-toolbar>

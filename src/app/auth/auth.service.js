@@ -16,6 +16,7 @@
   ) {
 
     var service = {
+      register: register,
       login: login,
       logout: logout,
       isLoggedIn: isLoggedIn,
@@ -26,7 +27,29 @@
 
     return service;
 
+    function register(email, name, password, confirm) {
+      return $http.put(url('/register'), {
+        email: email,
+        name: name,
+        password: password,
+        confirm: confirm
+      }).then(registrationComplete)
+        .catch(registrationFailed);
+
+      function registrationComplete(data) {
+        return data.data;
+      }
+
+      function registrationFailed(e) {
+        $log.error(e.data);
+        return $q.reject(e);
+      }
+    }
+
     function login(email, password) {
+      // make sure to clear user, useful for register
+      logout();
+
       return $http.post(url('/authenticate'), {
         email: email,
         password: password
@@ -47,7 +70,7 @@
 
     function logout() {
       AuthToken.setToken();
-      $rootScope.user = {};
+      $rootScope.me = {};
     }
 
     function isLoggedIn() {
@@ -55,11 +78,11 @@
     }
 
     function isAdmin() {
-      return Boolean($rootScope.user) && $rootScope.user.privilege == 'A';
+      return Boolean($rootScope.me) && $rootScope.me.privilege == 'A';
     }
 
     function isSelf(id) {
-      return $rootScope.user && $rootScope.user.id == id;
+      return $rootScope.me && $rootScope.me.id == id;
     }
 
     function getMe() {
@@ -69,7 +92,7 @@
 
       function getMeComplete(data) {
         var me = data.data.user;
-        $rootScope.user = me;
+        $rootScope.me = me;
         $log.info('Added me');
         return me;
       }

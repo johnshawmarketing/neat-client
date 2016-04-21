@@ -40,13 +40,23 @@
           }
         }
       })
+      .state('join', {
+        url: '/join',
+        views: {
+          content: {
+            templateUrl: 'app/login/join.html',
+            controller: 'AuthController',
+            controllerAs: 'au'
+          }
+        }
+      })
       .state('login', {
         url: '/login',
         views: {
           content: {
             templateUrl: 'app/login/login.html',
-            controller: 'LoginController',
-            controllerAs: 'lg'
+            controller: 'AuthController',
+            controllerAs: 'au'
           }
         }
       });

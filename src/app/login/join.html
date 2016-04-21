@@ -9,10 +9,10 @@
     flex-sm="55"
     flex-xs="90"
     class="login-box md-whiteframe-6dp">
-    <div style="height:140px">
-      <md-icon md-svg-icon="logo-login" class="login-logo"></md-icon>
+    <div style="height:70px">
+      <md-icon md-svg-icon="logo-login" class="join-logo"></md-icon>
     </div>
-    <form name="loginForm" class="login-form">
+    <form name="joinForm" class="login-form">
       <div layout="column">
         <md-input-container>
           <label>Email</label>
@@ -21,20 +21,35 @@
                  required
                  ng-pattern="/^.+@.+\..+$/"
                  ng-model="au.email">
-          <div ng-messages="loginForm.email.$error">
+          <div ng-messages="joinForm.email.$error">
             <div ng-message="required">Email Required</div>
             <div ng-message="pattern">Invalid Email</div>
           </div>
         </md-input-container>
         <md-input-container>
+          <label>Name</label>
+          <input name="name"
+                 ng-model="au.name">
+        </md-input-container>
+        <md-input-container>
           <label>Password</label>
           <input type="password"
                  name="password"
-                 ng-keypress="au.enter($event)"
                  required
                  ng-model="au.password">
-          <div ng-messages="loginForm.password.$error">
+          <div ng-messages="joinForm.password.$error">
             <div ng-message="required">Password required</div>
+          </div>
+        </md-input-container>
+        <md-input-container>
+          <label>Confirm Password</label>
+          <input type="password"
+                 name="confirm"
+                 ng-keypress="au.enter($event, true)"
+                 required
+                 ng-model="au.confirm">
+          <div ng-messages="joinForm.confirm.$error">
+            <div ng-message="required">Confirm Password required</div>
           </div>
         </md-input-container>
       </div>
@@ -42,9 +57,9 @@
     <md-card-actions layout="column">
       <md-button
         class="login-btn md-raised md-primary"
-        ng-click="au.login()"
+        ng-click="au.join()"
         >
-        Login
+        Join Neat
       </md-button>
     </md-card-actions>
   </md-card>
