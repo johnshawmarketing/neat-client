@@ -16,6 +16,7 @@
   ) {
 
     var service = {
+      register: register,
       login: login,
       logout: logout,
       isLoggedIn: isLoggedIn,
@@ -26,7 +27,29 @@
 
     return service;
 
+    function register(email, name, password, confirm) {
+      return $http.put(url('/register'), {
+        email: email,
+        name: name,
+        password: password,
+        confirm: confirm
+      }).then(registrationComplete)
+        .catch(registrationFailed);
+
+      function registrationComplete(data) {
+        return data.data;
+      }
+
+      function registrationFailed(e) {
+        $log.error(e.data);
+        return $q.reject(e);
+      }
+    }
+
     function login(email, password) {
+      // make sure to clear user, useful for register
+      logout();
+
       return $http.post(url('/authenticate'), {
         email: email,
         password: password

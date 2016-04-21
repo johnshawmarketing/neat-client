@@ -3,10 +3,10 @@
 
   angular
     .module('neatClient')
-    .controller('LoginController', LoginController);
+    .controller('AuthController', AuthController);
 
   /** @ngInject */
-  function LoginController(
+  function AuthController(
     $state,
     $log,
     AuthService
@@ -14,6 +14,7 @@
     var vm = this;
 
     vm.login = login;
+    vm.join = joinNeat;
     vm.enter = enter;
 
     // TODO: if form invalid, disable function
@@ -26,8 +27,24 @@
         });
     }
 
-    function enter(ev) {
+    function joinNeat() {
+      AuthService.register(
+        vm.email,
+        vm.name,
+        vm.password,
+        vm.confirm
+      ).then(function(res) {
+        if (res.user.active) {
+          login();
+        }
+      });
+    }
+
+    function enter(ev, join) {
       if (ev.charCode !== 13) return;
+      if (join) {
+        return joinNeat();
+      }
       return login();
     }
 
