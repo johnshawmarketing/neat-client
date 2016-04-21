@@ -70,7 +70,7 @@
 
     function logout() {
       AuthToken.setToken();
-      $rootScope.user = {};
+      $rootScope.me = {};
     }
 
     function isLoggedIn() {
@@ -78,11 +78,11 @@
     }
 
     function isAdmin() {
-      return Boolean($rootScope.user) && $rootScope.user.privilege == 'A';
+      return Boolean($rootScope.me) && $rootScope.me.privilege == 'A';
     }
 
     function isSelf(id) {
-      return $rootScope.user && $rootScope.user.id == id;
+      return $rootScope.me && $rootScope.me.id == id;
     }
 
     function getMe() {
@@ -92,7 +92,7 @@
 
       function getMeComplete(data) {
         var me = data.data.user;
-        $rootScope.user = me;
+        $rootScope.me = me;
         $log.info('Added me');
         return me;
       }

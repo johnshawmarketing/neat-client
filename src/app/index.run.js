@@ -31,7 +31,7 @@
       }
 
       if (isLoggedIn) {
-        if (!$rootScope.user || !$rootScope.user.privilege) {
+        if (!$rootScope.me || !$rootScope.me.privilege) {
           AuthService.getMe().then(function() {
             $log.info('Readded me');
           });

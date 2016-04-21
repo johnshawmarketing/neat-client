@@ -113,7 +113,7 @@
               address: vm.address,
               description: vm.description,
               severity: vm.severity,
-              user_id: $rootScope.user.id,
+              user_id: $rootScope.me.id,
               type_id: vm.typeId
             };
 
