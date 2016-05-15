@@ -12,8 +12,10 @@
     MapDialog,
     mapIcons,
     MapInit,
+    $log,
     $mdDialog,
     $mdSidenav,
+    $rootScope,
     $scope,
     $window
   ) {
@@ -47,27 +49,26 @@
       if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(function(pos) {
           vm.locating = false;
-          setupMap(pos.coords);
+          $rootScope.mapView.center = {
+            lat: pos.coords.latitude,
+            lng: pos.coords.longitude
+          };
+          setupMap();
         });
       } else {
         $log.error('Browser does not support goelocation');
       }
     }
 
-    function setupMap(coords) {
+    function setupMap() {
       Gmap = $window.google.maps;
-      // default map center
-      var center = {
-        lat: 44.4120908,
-        lng: -79.6701331
-      }
-      if (coords) {
-        center.lat = coords.latitude;
-        center.lng = coords.longitude;
-      }
-      neatMap = new Gmap.Map(mapEl, {
-        center: center,
-        zoom: 15
+      neatMap = new Gmap.Map(mapEl, $rootScope.mapView);
+
+      neatMap.addListener('idle', function() {
+        $rootScope.mapView = {
+          center: neatMap.getCenter(),
+          zoom: neatMap.getZoom()
+        }
       });
 
       clickMapToAddListener();
