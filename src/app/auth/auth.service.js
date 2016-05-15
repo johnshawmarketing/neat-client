@@ -64,7 +64,7 @@
       function authFailed(e) {
         AuthToken.setToken();
         $log.error(e.data);
-        return $q.reject(e);
+        return $q.reject(e.data);
       }
     }
 

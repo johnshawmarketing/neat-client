@@ -7,9 +7,11 @@
 
   /** @ngInject */
   function AuthController(
-    $state,
+    AuthService,
     $log,
-    AuthService
+    $mdDialog,
+    $scope,
+    $state
   ) {
     var vm = this;
 
@@ -18,13 +20,19 @@
     vm.enter = enter;
 
     // TODO: if form invalid, disable function
-    function login() {
-      AuthService.login(vm.email, vm.password)
-        .then(function() {
-          AuthService.getMe().then(function() {
-            $state.go('map');
+    function login(ev) {
+      if ($scope.loginForm.$valid) {
+        AuthService.login(vm.email, vm.password)
+          .then(function() {
+            AuthService.getMe().then(function() {
+              $state.go('map');
+            });
+          }).catch(function(err) {
+            showInvalidDialog(ev, err.message);
           });
-        });
+      } else {
+        showInvalidDialog(ev, 'One or more fields invalid');
+      }
     }
 
     function joinNeat() {
@@ -45,7 +53,22 @@
       if (join) {
         return joinNeat();
       }
-      return login();
+      return login(ev);
+    }
+
+    function showInvalidDialog(ev, message) {
+      var dialog = $mdDialog.confirm()
+        .clickOutsideToClose(true)
+        .title('Login Failed')
+        .textContent(message)
+        .ariaLabel('Invalid login warning dialog')
+        .targetEvent(ev)
+        .ok('Try Again')
+        .cancel('Ok');
+
+      $mdDialog.show(dialog).then(function() {
+        vm.password = '';
+      });
     }
 
   }
