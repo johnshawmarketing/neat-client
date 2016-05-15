@@ -23,10 +23,12 @@
     var neatMap;
     var mapEl;
     var clearing = false; // for filterSeverity watch
+    var navigator = $window.navigator;
 
     vm.toggleSideMenu = toggleSideMenu;
     vm.filterUpdate = filterUpdate;
     vm.filterClearAll = filterClearAll;
+    vm.getLocalMap = getLocalMap;
 
     activate();
 
@@ -40,10 +42,31 @@
     /////////////////////////////////
     // Google Map Setup
     // /////////////////////////////
-    function setupMap() {
+    function getLocalMap() {
+      vm.locating = true;
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function(pos) {
+          vm.locating = false;
+          setupMap(pos.coords);
+        });
+      } else {
+        $log.error('Browser does not support goelocation');
+      }
+    }
+
+    function setupMap(coords) {
       Gmap = $window.google.maps;
+      // default map center
+      var center = {
+        lat: 44.4120908,
+        lng: -79.6701331
+      }
+      if (coords) {
+        center.lat = coords.latitude;
+        center.lng = coords.longitude;
+      }
       neatMap = new Gmap.Map(mapEl, {
-        center: {lat: 44.4120908, lng: -79.6701331},
+        center: center,
         zoom: 15
       });
 

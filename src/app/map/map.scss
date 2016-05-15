@@ -10,3 +10,8 @@ md-progress-circular {
 md-sidenav {
   width: 400px;
 }
+
+.map-progress {
+  position: fixed;
+  z-index: 999;
+}

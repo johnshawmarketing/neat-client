@@ -7,8 +7,7 @@
 
   /** @ngInject */
   function TitleController(
-    $rootScope,
-    $state
+    $rootScope
   ) {
     var vm = this;
     var titles = {
