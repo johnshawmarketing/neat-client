@@ -54,12 +54,36 @@
            aria-label="Filter markers">
   <i class="material-icons mi--mid">assignment</i>
 </md-button>
-<md-button class="md-fab md-primary md-fab--lg md-fab--add pos-fixed"
-           ng-click="mp.showDialog($event)"
-           aria-label="Add user">
-  <i class="material-icons mi--mid">
-    add_location
-  </i>
-</md-button>
+<md-fab-speed-dial class="md-scale pos-fixed md-fab--add" md-direction="up">
+  <md-fab-trigger>
+    <md-button class="md-fab md-primary md-fab--lg"
+               aria-label="map function menu"
+      >
+      <i class="material-icons mi--mid">
+        more_vert
+      </i>
+    </md-button>
+  </md-fab-trigger>
+  <md-fab-actions>
+    <md-button class="md-fab md-raised md-mini" aria-label="refresh markers">
+      <i class="material-icons mi--mid">
+        refresh
+      </i>
+    </md-button>
+    <md-button class="md-fab md-raised md-mini md-primary"
+               ng-click="mp.showDialog($event)"
+               aria-label="Add new marker">
+      <i class="material-icons mi--mid">
+        add_location
+      </i>
+    </md-button>
+    <md-button class="md-fab md-raised md-mini"
+               aria-label="Locate current map view">
+      <i class="material-icons mi--mid">
+        my_location
+      </i>
+    </md-button>
+  </md-fab-actions>
+</md-fab-speed-dial>
 <div layout="row" id="map" layout-fill>
 </div>
