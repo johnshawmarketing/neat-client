@@ -8,7 +8,6 @@
   /** @ngInject */
   function AuthController(
     AuthService,
-    $log,
     $mdDialog,
     $scope,
     $state
@@ -19,9 +18,9 @@
     vm.join = joinNeat;
     vm.enter = enter;
 
-    // TODO: if form invalid, disable function
     function login(ev) {
-      if ($scope.loginForm.$valid) {
+      var isValid = $scope.loginForm.$valid || $scope.joinForm.$valid;
+      if (isValid) {
         AuthService.login(vm.email, vm.password)
           .then(function() {
             AuthService.getMe().then(function() {
