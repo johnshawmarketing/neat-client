@@ -13,6 +13,15 @@
     AuthService
   ) {
 
+    // map defaults
+    $rootScope.mapView = {
+      center: {
+        lat: 44.4120908,
+        lng: -79.6701331
+      },
+      zoom: 15
+    }
+
     $rootScope.$on('$stateChangeStart', watchAuth);
 
     function watchAuth(e, toState) {
