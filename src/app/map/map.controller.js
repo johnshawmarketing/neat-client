@@ -58,8 +58,8 @@
       Gmap = $window.google.maps;
       // default map center
       var center = {
-        lat: 43.4779464,
-        lng: -80.5258332
+        lat: 44.4120908,
+        lng: -79.6701331
       }
       if (coords) {
         center.lat = coords.latitude;
@@ -67,7 +67,6 @@
       }
       neatMap = new Gmap.Map(mapEl, {
         center: center,
-        // center: pos || {lat: 44.4120908, lng: -79.6701331},
         zoom: 15
       });
 
