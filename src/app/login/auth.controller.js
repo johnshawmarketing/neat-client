@@ -19,7 +19,10 @@
     vm.enter = enter;
 
     function login(ev) {
-      var isValid = $scope.loginForm.$valid || $scope.joinForm.$valid;
+      var isValid = $scope.loginForm
+        ? $scope.loginForm.$valid
+        : $scope.joinForm.$valid;
+
       if (isValid) {
         AuthService.login(vm.email, vm.password)
           .then(function() {
