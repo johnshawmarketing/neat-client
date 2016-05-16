@@ -122,7 +122,8 @@
         position: { lat: lat, lng: lng },
         icon: mapIcons(type, record.severity, Gmap),
         map: neatMap,
-        myRecord: record
+        myRecord: record,
+        infowindow: null
       };
 
       if (animate) {
@@ -148,18 +149,24 @@
       marker.addListener('click', function() {
         var self = this;
 
+        if (self.infowindow) {
+          var infowindow = self.infowindow;
+          self.infowindow = null;
+          return infowindow.close();
+        }
+
         // on click create a new info window with record content
-        var infowindow = new Gmap.InfoWindow({
+        self.infowindow = new Gmap.InfoWindow({
           content: MapDialog.createInfoContent(self.myRecord)
         });
 
         // add click listener to info window buttons
-        infowindow.addListener('domready', function() {
+        self.infowindow.addListener('domready', function() {
           var editBtn = byId('edit-record-btn');
           var delBtn = byId('del-record-btn');
 
           editBtn.addEventListener('click', function(ev) {
-            vm.showDialog(ev, self, infowindow, markers);
+            vm.showDialog(ev, self, self.infowindow, markers);
           });
 
           delBtn.addEventListener('click', function(ev) {
@@ -167,7 +174,7 @@
           });
         });
 
-        infowindow.open(neatMap, self);
+        return self.infowindow.open(neatMap, self);
       });
     }
 
