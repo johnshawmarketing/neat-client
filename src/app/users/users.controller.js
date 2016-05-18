@@ -29,6 +29,7 @@
     vm.focusSearch = focusSearch;
     vm.roleClass = roleClass;
     vm.resetText = resetText;
+    vm.btnDisabled = btnDisabled;
 
     activate();
 
@@ -113,6 +114,18 @@
       if (user.disabled) return 'enable';
       if (user.active) return 'reset';
       return 'inactive';
+    }
+
+    function btnDisabled(user, button) {
+      var isSelf = AuthService.isSelf;
+      var isAdmin = AuthService.isAdmin;
+      var isDisabled = isSelf(user.id) || !isAdmin() || user.id < 3;
+      if (button == 'role') {
+        isDisabled = user.disabled || isDisabled;
+      } else if (button == 'reset') {
+        isDisabled = isDisabled || !user.disabled && !user.active;
+      }
+      return isDisabled;
     }
 
   }
