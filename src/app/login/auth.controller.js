@@ -37,7 +37,7 @@
       }
     }
 
-    function joinNeat() {
+    function joinNeat(ev) {
       AuthService.register(
         vm.email,
         vm.name,
@@ -45,8 +45,10 @@
         vm.confirm
       ).then(function(res) {
         if (res.user.active) {
-          login();
+          login(ev);
         }
+      }).catch(function(err) {
+        showInvalidDialog(ev, err.data.message);
       });
     }
 
