@@ -49,10 +49,13 @@
       if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(function(pos) {
           vm.locating = false;
-          $rootScope.mapView.center = {
-            lat: pos.coords.latitude,
-            lng: pos.coords.longitude
-          };
+          $rootScope.mapView = {
+            center: {
+              lat: pos.coords.latitude,
+              lng: pos.coords.longitude
+            },
+            zoom: 15
+          }
           setupMap();
         });
       } else {

@@ -13,10 +13,15 @@
     var vm = this;
 
     vm.logout = logout;
+    vm.join = join;
 
     function logout() {
       AuthService.logout();
       $state.go('login');
+    }
+
+    function join(argument) {
+      $state.go('join');
     }
 
   }

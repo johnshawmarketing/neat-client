@@ -34,7 +34,7 @@
   }
 
   function url(path, id) {
-    // var baseUrl = 'http://neatmap.xyz/api';
+    // var baseUrl = 'https://neatmap.xyz/api';
     var baseUrl = 'http://localhost:4000/api';
     path = baseUrl + path;
     if (id) path += '/' + id;
