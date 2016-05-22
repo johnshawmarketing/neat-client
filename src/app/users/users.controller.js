@@ -119,7 +119,7 @@
     function btnDisabled(user, button) {
       var isSelf = AuthService.isSelf;
       var isAdmin = AuthService.isAdmin;
-      var isDisabled = isSelf(user.id) || !isAdmin() || user.id < 3;
+      var isDisabled = isSelf(user.id) || !isAdmin() || user.id < 2;
       if (button == 'role') {
         isDisabled = user.disabled || isDisabled;
       } else if (button == 'reset') {
